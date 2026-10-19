@@ -1,0 +1,6 @@
+{
+  "parent": "mcbraziers:block/brazier/floor_corner_south",
+  "textures": {
+    "body": "mcbraziers:block/crying_obsidian_brazier"
+  }
+}

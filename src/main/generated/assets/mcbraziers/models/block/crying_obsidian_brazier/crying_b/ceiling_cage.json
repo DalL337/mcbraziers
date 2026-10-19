@@ -1,0 +1,8 @@
+{
+  "parent": "mcbraziers:block/brazier/crying_b/ceiling_cage",
+  "textures": {
+    "body": "mcbraziers:block/crying_obsidian_brazier",
+    "chain": "minecraft:block/iron_chain",
+    "tears": "mcbraziers:block/crying_obsidian_brazier_tears"
+  }
+}

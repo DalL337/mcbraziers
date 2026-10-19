@@ -1,0 +1,6 @@
+{
+  "parent": "mcbraziers:block/brazier/floor_bridge_east",
+  "textures": {
+    "body": "mcbraziers:block/netherite_brazier"
+  }
+}

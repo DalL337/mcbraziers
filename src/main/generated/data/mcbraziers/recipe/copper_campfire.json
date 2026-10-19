@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "L": "#minecraft:logs",
+    "N": "minecraft:copper_nugget",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    " S ",
+    "SNS",
+    "LLL"
+  ],
+  "result": {
+    "id": "mcbraziers:copper_campfire"
+  }
+}

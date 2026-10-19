@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_crying_obsidian_bars": {
+      "conditions": {
+        "items": [
+          {
+            "items": "mcbraziers:crying_obsidian_bars"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "mcbraziers:crying_obsidian_brazier"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_crying_obsidian_bars"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "mcbraziers:crying_obsidian_brazier"
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "X": "minecraft:iron_bars",
+    "Y": "minecraft:obsidian"
+  },
+  "pattern": [
+    "XXX",
+    "XYX",
+    "XXX"
+  ],
+  "result": {
+    "count": 8,
+    "id": "mcbraziers:obsidian_bars"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "mcbraziers:block/brazier/ceiling_bed",
+  "textures": {
+    "embers": "mcbraziers:block/brazier_amethyst_embers_lit"
+  }
+}

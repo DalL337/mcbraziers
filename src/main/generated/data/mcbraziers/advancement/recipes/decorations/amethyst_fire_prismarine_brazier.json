@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_prismarine_bars": {
+      "conditions": {
+        "items": [
+          {
+            "items": "mcbraziers:prismarine_bars"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "mcbraziers:amethyst_fire_prismarine_brazier"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_prismarine_bars"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "mcbraziers:amethyst_fire_prismarine_brazier"
+    ]
+  }
+}

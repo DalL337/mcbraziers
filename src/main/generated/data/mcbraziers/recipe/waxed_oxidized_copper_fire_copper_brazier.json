@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "waxed_oxidized_copper_brazier",
+  "key": {
+    "B": "minecraft:waxed_oxidized_copper_bars",
+    "C": "mcbraziers:copper_campfire"
+  },
+  "pattern": [
+    "BBB",
+    "BCB",
+    "BBB"
+  ],
+  "result": {
+    "id": "mcbraziers:waxed_oxidized_copper_fire_copper_brazier"
+  }
+}

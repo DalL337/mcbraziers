@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "obsidian_brazier",
+  "key": {
+    "B": "mcbraziers:obsidian_bars",
+    "C": "mcbraziers:copper_campfire"
+  },
+  "pattern": [
+    "BBB",
+    "BCB",
+    "BBB"
+  ],
+  "result": {
+    "id": "mcbraziers:copper_fire_obsidian_brazier"
+  }
+}

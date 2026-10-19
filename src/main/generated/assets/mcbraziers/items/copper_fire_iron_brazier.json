@@ -1,0 +1,41 @@
+{
+  "model": {
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:model",
+        "model": "mcbraziers:block/iron_brazier/floor_base"
+      },
+      {
+        "type": "minecraft:model",
+        "model": "mcbraziers:block/iron_brazier/floor_side_north"
+      },
+      {
+        "type": "minecraft:model",
+        "model": "mcbraziers:block/iron_brazier/floor_side_east"
+      },
+      {
+        "type": "minecraft:model",
+        "model": "mcbraziers:block/iron_brazier/floor_side_south"
+      },
+      {
+        "type": "minecraft:model",
+        "model": "mcbraziers:block/iron_brazier/floor_side_west"
+      },
+      {
+        "type": "minecraft:model",
+        "model": "mcbraziers:block/brazier_copper_embers_lit/floor_bed"
+      },
+      {
+        "type": "minecraft:model",
+        "model": "mcbraziers:block/brazier_fire/copper/floor_fire",
+        "tints": [
+          {
+            "type": "minecraft:constant",
+            "value": -4194445
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": "minecraft:amethyst_shard",
+    "L": "#minecraft:logs",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    " S ",
+    "SAS",
+    "LLL"
+  ],
+  "result": {
+    "id": "mcbraziers:amethyst_campfire"
+  }
+}

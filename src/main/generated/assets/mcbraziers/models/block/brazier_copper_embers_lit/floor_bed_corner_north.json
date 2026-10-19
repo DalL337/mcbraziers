@@ -1,0 +1,6 @@
+{
+  "parent": "mcbraziers:block/brazier/floor_bed_corner_north",
+  "textures": {
+    "embers": "mcbraziers:block/brazier_copper_embers_lit"
+  }
+}

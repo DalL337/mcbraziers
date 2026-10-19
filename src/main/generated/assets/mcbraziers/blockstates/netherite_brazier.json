@@ -1,0 +1,2067 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_base"
+      },
+      "when": {
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_side_north"
+      },
+      "when": {
+        "north_connected": "false",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_bridge_north"
+      },
+      "when": {
+        "north_connected": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_bridge_ccw_north"
+      },
+      "when": {
+        "north_connected": "true",
+        "placement": "floor",
+        "west_connected": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_bridge_cw_north"
+      },
+      "when": {
+        "east_connected": "false",
+        "north_connected": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_corner_north"
+      },
+      "when": {
+        "east_connected": "true",
+        "north_connected": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_grate_bridge_north"
+      },
+      "when": {
+        "closed": "true",
+        "north_connected": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_grate_corner_north"
+      },
+      "when": {
+        "closed": "true",
+        "east_connected": "true",
+        "north_connected": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_side_east"
+      },
+      "when": {
+        "east_connected": "false",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_bridge_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_bridge_ccw_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "north_connected": "false",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_bridge_cw_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "placement": "floor",
+        "south_connected": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_corner_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "placement": "floor",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_grate_bridge_east"
+      },
+      "when": {
+        "closed": "true",
+        "east_connected": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_grate_corner_east"
+      },
+      "when": {
+        "closed": "true",
+        "east_connected": "true",
+        "placement": "floor",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_side_south"
+      },
+      "when": {
+        "placement": "floor",
+        "south_connected": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_bridge_south"
+      },
+      "when": {
+        "placement": "floor",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_bridge_ccw_south"
+      },
+      "when": {
+        "east_connected": "false",
+        "placement": "floor",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_bridge_cw_south"
+      },
+      "when": {
+        "placement": "floor",
+        "south_connected": "true",
+        "west_connected": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_corner_south"
+      },
+      "when": {
+        "placement": "floor",
+        "south_connected": "true",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_grate_bridge_south"
+      },
+      "when": {
+        "closed": "true",
+        "placement": "floor",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_grate_corner_south"
+      },
+      "when": {
+        "closed": "true",
+        "placement": "floor",
+        "south_connected": "true",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_side_west"
+      },
+      "when": {
+        "placement": "floor",
+        "west_connected": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_bridge_west"
+      },
+      "when": {
+        "placement": "floor",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_bridge_ccw_west"
+      },
+      "when": {
+        "placement": "floor",
+        "south_connected": "false",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_bridge_cw_west"
+      },
+      "when": {
+        "north_connected": "false",
+        "placement": "floor",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_corner_west"
+      },
+      "when": {
+        "north_connected": "true",
+        "placement": "floor",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_grate_bridge_west"
+      },
+      "when": {
+        "closed": "true",
+        "placement": "floor",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_grate_corner_west"
+      },
+      "when": {
+        "closed": "true",
+        "north_connected": "true",
+        "placement": "floor",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/floor_grate"
+      },
+      "when": {
+        "closed": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/floor_bed"
+      },
+      "when": {
+        "lit": "false",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/floor_bed_bridge_north"
+      },
+      "when": {
+        "lit": "false",
+        "north_connected": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/floor_bed_corner_north"
+      },
+      "when": {
+        "east_connected": "true",
+        "lit": "false",
+        "north_connected": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/floor_bed_bridge_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "lit": "false",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/floor_bed_corner_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "lit": "false",
+        "placement": "floor",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/floor_bed_bridge_south"
+      },
+      "when": {
+        "lit": "false",
+        "placement": "floor",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/floor_bed_corner_south"
+      },
+      "when": {
+        "lit": "false",
+        "placement": "floor",
+        "south_connected": "true",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/floor_bed_bridge_west"
+      },
+      "when": {
+        "lit": "false",
+        "placement": "floor",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/floor_bed_corner_west"
+      },
+      "when": {
+        "lit": "false",
+        "north_connected": "true",
+        "placement": "floor",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/floor_bed"
+      },
+      "when": {
+        "fire": "normal",
+        "lit": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/floor_bed_bridge_north"
+      },
+      "when": {
+        "fire": "normal",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/floor_bed_corner_north"
+      },
+      "when": {
+        "east_connected": "true",
+        "fire": "normal",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/floor_bed_bridge_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "fire": "normal",
+        "lit": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/floor_bed_corner_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "fire": "normal",
+        "lit": "true",
+        "placement": "floor",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/floor_bed_bridge_south"
+      },
+      "when": {
+        "fire": "normal",
+        "lit": "true",
+        "placement": "floor",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/floor_bed_corner_south"
+      },
+      "when": {
+        "fire": "normal",
+        "lit": "true",
+        "placement": "floor",
+        "south_connected": "true",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/floor_bed_bridge_west"
+      },
+      "when": {
+        "fire": "normal",
+        "lit": "true",
+        "placement": "floor",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/floor_bed_corner_west"
+      },
+      "when": {
+        "fire": "normal",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "floor",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/normal/floor_fire"
+      },
+      "when": {
+        "fire": "normal",
+        "lit": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/floor_bed"
+      },
+      "when": {
+        "fire": "soul",
+        "lit": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/floor_bed_bridge_north"
+      },
+      "when": {
+        "fire": "soul",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/floor_bed_corner_north"
+      },
+      "when": {
+        "east_connected": "true",
+        "fire": "soul",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/floor_bed_bridge_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "fire": "soul",
+        "lit": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/floor_bed_corner_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "fire": "soul",
+        "lit": "true",
+        "placement": "floor",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/floor_bed_bridge_south"
+      },
+      "when": {
+        "fire": "soul",
+        "lit": "true",
+        "placement": "floor",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/floor_bed_corner_south"
+      },
+      "when": {
+        "fire": "soul",
+        "lit": "true",
+        "placement": "floor",
+        "south_connected": "true",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/floor_bed_bridge_west"
+      },
+      "when": {
+        "fire": "soul",
+        "lit": "true",
+        "placement": "floor",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/floor_bed_corner_west"
+      },
+      "when": {
+        "fire": "soul",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "floor",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/soul/floor_fire"
+      },
+      "when": {
+        "fire": "soul",
+        "lit": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/floor_bed"
+      },
+      "when": {
+        "fire": "copper",
+        "lit": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/floor_bed_bridge_north"
+      },
+      "when": {
+        "fire": "copper",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/floor_bed_corner_north"
+      },
+      "when": {
+        "east_connected": "true",
+        "fire": "copper",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/floor_bed_bridge_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "fire": "copper",
+        "lit": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/floor_bed_corner_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "fire": "copper",
+        "lit": "true",
+        "placement": "floor",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/floor_bed_bridge_south"
+      },
+      "when": {
+        "fire": "copper",
+        "lit": "true",
+        "placement": "floor",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/floor_bed_corner_south"
+      },
+      "when": {
+        "fire": "copper",
+        "lit": "true",
+        "placement": "floor",
+        "south_connected": "true",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/floor_bed_bridge_west"
+      },
+      "when": {
+        "fire": "copper",
+        "lit": "true",
+        "placement": "floor",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/floor_bed_corner_west"
+      },
+      "when": {
+        "fire": "copper",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "floor",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/copper/floor_fire"
+      },
+      "when": {
+        "fire": "copper",
+        "lit": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/floor_bed"
+      },
+      "when": {
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/floor_bed_bridge_north"
+      },
+      "when": {
+        "fire": "amethyst",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/floor_bed_corner_north"
+      },
+      "when": {
+        "east_connected": "true",
+        "fire": "amethyst",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/floor_bed_bridge_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/floor_bed_corner_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "floor",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/floor_bed_bridge_south"
+      },
+      "when": {
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "floor",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/floor_bed_corner_south"
+      },
+      "when": {
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "floor",
+        "south_connected": "true",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/floor_bed_bridge_west"
+      },
+      "when": {
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "floor",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/floor_bed_corner_west"
+      },
+      "when": {
+        "fire": "amethyst",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "floor",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/amethyst/floor_fire"
+      },
+      "when": {
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_core"
+      },
+      "when": {
+        "facing": "north",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_side_west"
+      },
+      "when": {
+        "facing": "north",
+        "placement": "wall",
+        "west_connected": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_bridge_west"
+      },
+      "when": {
+        "facing": "north",
+        "placement": "wall",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_side_east"
+      },
+      "when": {
+        "east_connected": "false",
+        "facing": "north",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_bridge_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "facing": "north",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/wall_bed"
+      },
+      "when": {
+        "facing": "north",
+        "lit": "false",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/wall_bed_bridge_west"
+      },
+      "when": {
+        "facing": "north",
+        "lit": "false",
+        "placement": "wall",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/wall_bed_bridge_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "facing": "north",
+        "lit": "false",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/wall_bed"
+      },
+      "when": {
+        "facing": "north",
+        "fire": "normal",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/wall_bed_bridge_west"
+      },
+      "when": {
+        "facing": "north",
+        "fire": "normal",
+        "lit": "true",
+        "placement": "wall",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/wall_bed_bridge_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "facing": "north",
+        "fire": "normal",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/normal/wall_fire"
+      },
+      "when": {
+        "facing": "north",
+        "fire": "normal",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/wall_bed"
+      },
+      "when": {
+        "facing": "north",
+        "fire": "soul",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/wall_bed_bridge_west"
+      },
+      "when": {
+        "facing": "north",
+        "fire": "soul",
+        "lit": "true",
+        "placement": "wall",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/wall_bed_bridge_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "facing": "north",
+        "fire": "soul",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/soul/wall_fire"
+      },
+      "when": {
+        "facing": "north",
+        "fire": "soul",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/wall_bed"
+      },
+      "when": {
+        "facing": "north",
+        "fire": "copper",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/wall_bed_bridge_west"
+      },
+      "when": {
+        "facing": "north",
+        "fire": "copper",
+        "lit": "true",
+        "placement": "wall",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/wall_bed_bridge_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "facing": "north",
+        "fire": "copper",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/copper/wall_fire"
+      },
+      "when": {
+        "facing": "north",
+        "fire": "copper",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/wall_bed"
+      },
+      "when": {
+        "facing": "north",
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/wall_bed_bridge_west"
+      },
+      "when": {
+        "facing": "north",
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "wall",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/wall_bed_bridge_east"
+      },
+      "when": {
+        "east_connected": "true",
+        "facing": "north",
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/amethyst/wall_fire"
+      },
+      "when": {
+        "facing": "north",
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_core",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_side_west",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "north_connected": "false",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_bridge_west",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "north_connected": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_side_east",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "placement": "wall",
+        "south_connected": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_bridge_east",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "placement": "wall",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/wall_bed",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "lit": "false",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/wall_bed_bridge_west",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "lit": "false",
+        "north_connected": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/wall_bed_bridge_east",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "lit": "false",
+        "placement": "wall",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/wall_bed",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "fire": "normal",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/wall_bed_bridge_west",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "fire": "normal",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/wall_bed_bridge_east",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "fire": "normal",
+        "lit": "true",
+        "placement": "wall",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/normal/wall_fire",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "fire": "normal",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/wall_bed",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "fire": "soul",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/wall_bed_bridge_west",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "fire": "soul",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/wall_bed_bridge_east",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "fire": "soul",
+        "lit": "true",
+        "placement": "wall",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/soul/wall_fire",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "fire": "soul",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/wall_bed",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "fire": "copper",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/wall_bed_bridge_west",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "fire": "copper",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/wall_bed_bridge_east",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "fire": "copper",
+        "lit": "true",
+        "placement": "wall",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/copper/wall_fire",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "fire": "copper",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/wall_bed",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/wall_bed_bridge_west",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "fire": "amethyst",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/wall_bed_bridge_east",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "wall",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/amethyst/wall_fire",
+        "y": 90
+      },
+      "when": {
+        "facing": "east",
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_core",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_side_west",
+        "y": 180
+      },
+      "when": {
+        "east_connected": "false",
+        "facing": "south",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_bridge_west",
+        "y": 180
+      },
+      "when": {
+        "east_connected": "true",
+        "facing": "south",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_side_east",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "placement": "wall",
+        "west_connected": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_bridge_east",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "placement": "wall",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/wall_bed",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "lit": "false",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/wall_bed_bridge_west",
+        "y": 180
+      },
+      "when": {
+        "east_connected": "true",
+        "facing": "south",
+        "lit": "false",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/wall_bed_bridge_east",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "lit": "false",
+        "placement": "wall",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/wall_bed",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "fire": "normal",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/wall_bed_bridge_west",
+        "y": 180
+      },
+      "when": {
+        "east_connected": "true",
+        "facing": "south",
+        "fire": "normal",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/wall_bed_bridge_east",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "fire": "normal",
+        "lit": "true",
+        "placement": "wall",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/normal/wall_fire",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "fire": "normal",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/wall_bed",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "fire": "soul",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/wall_bed_bridge_west",
+        "y": 180
+      },
+      "when": {
+        "east_connected": "true",
+        "facing": "south",
+        "fire": "soul",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/wall_bed_bridge_east",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "fire": "soul",
+        "lit": "true",
+        "placement": "wall",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/soul/wall_fire",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "fire": "soul",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/wall_bed",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "fire": "copper",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/wall_bed_bridge_west",
+        "y": 180
+      },
+      "when": {
+        "east_connected": "true",
+        "facing": "south",
+        "fire": "copper",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/wall_bed_bridge_east",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "fire": "copper",
+        "lit": "true",
+        "placement": "wall",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/copper/wall_fire",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "fire": "copper",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/wall_bed",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/wall_bed_bridge_west",
+        "y": 180
+      },
+      "when": {
+        "east_connected": "true",
+        "facing": "south",
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/wall_bed_bridge_east",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "wall",
+        "west_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/amethyst/wall_fire",
+        "y": 180
+      },
+      "when": {
+        "facing": "south",
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_core",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_side_west",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "placement": "wall",
+        "south_connected": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_bridge_west",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "placement": "wall",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_side_east",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "north_connected": "false",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/wall_bridge_east",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "north_connected": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/wall_bed",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "lit": "false",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/wall_bed_bridge_west",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "lit": "false",
+        "placement": "wall",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/wall_bed_bridge_east",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "lit": "false",
+        "north_connected": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/wall_bed",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "fire": "normal",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/wall_bed_bridge_west",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "fire": "normal",
+        "lit": "true",
+        "placement": "wall",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/wall_bed_bridge_east",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "fire": "normal",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/normal/wall_fire",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "fire": "normal",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/wall_bed",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "fire": "soul",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/wall_bed_bridge_west",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "fire": "soul",
+        "lit": "true",
+        "placement": "wall",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/wall_bed_bridge_east",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "fire": "soul",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/soul/wall_fire",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "fire": "soul",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/wall_bed",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "fire": "copper",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/wall_bed_bridge_west",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "fire": "copper",
+        "lit": "true",
+        "placement": "wall",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/wall_bed_bridge_east",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "fire": "copper",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/copper/wall_fire",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "fire": "copper",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/wall_bed",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/wall_bed_bridge_west",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "wall",
+        "south_connected": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/wall_bed_bridge_east",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "fire": "amethyst",
+        "lit": "true",
+        "north_connected": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/amethyst/wall_fire",
+        "y": 270
+      },
+      "when": {
+        "facing": "west",
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "wall"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/netherite_brazier/ceiling_cage"
+      },
+      "when": {
+        "placement": "ceiling"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers/ceiling_bed"
+      },
+      "when": {
+        "lit": "false",
+        "placement": "ceiling"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_embers_lit/ceiling_bed"
+      },
+      "when": {
+        "fire": "normal",
+        "lit": "true",
+        "placement": "ceiling"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/normal/ceiling_fire"
+      },
+      "when": {
+        "fire": "normal",
+        "lit": "true",
+        "placement": "ceiling"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_soul_embers_lit/ceiling_bed"
+      },
+      "when": {
+        "fire": "soul",
+        "lit": "true",
+        "placement": "ceiling"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/soul/ceiling_fire"
+      },
+      "when": {
+        "fire": "soul",
+        "lit": "true",
+        "placement": "ceiling"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_copper_embers_lit/ceiling_bed"
+      },
+      "when": {
+        "fire": "copper",
+        "lit": "true",
+        "placement": "ceiling"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/copper/ceiling_fire"
+      },
+      "when": {
+        "fire": "copper",
+        "lit": "true",
+        "placement": "ceiling"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_amethyst_embers_lit/ceiling_bed"
+      },
+      "when": {
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "ceiling"
+      }
+    },
+    {
+      "apply": {
+        "model": "mcbraziers:block/brazier_fire/amethyst/ceiling_fire"
+      },
+      "when": {
+        "fire": "amethyst",
+        "lit": "true",
+        "placement": "ceiling"
+      }
+    }
+  ]
+}
