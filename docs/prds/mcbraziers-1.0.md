@@ -2,6 +2,8 @@
 
 ## Status
 
+- 2026-10-19 — Amended — owner decision: the MIT copyright holder is DalL337
+  (Open Questions). No questions remain open.
 - 2026-10-18 — Amended — owner decision: the game may recolour vanilla textures
   while loading (License addendum); amethyst fire uses it. Crying obsidian's
   stains are static and varied (Content erratum).
@@ -304,6 +306,10 @@ contract (next deliverable). The rules:
 
 1. **Copyright holder** for the MIT `LICENSE`: left open by the owner
    (2026-10-18). Needed before a `LICENSE` file ships.
+
+   > **Resolved (2026-10-19, owner decision):** DalL337, the GitHub account
+   > that owns the repository. `LICENSE` reads "Copyright (c) 2026 DalL337",
+   > and `fabric.mod.json` declares `MIT`.
 
 Resolved 2026-10-18 (owner): the cooking speeds stand as listed;
 `/brazier extinguish` stays and toggles any brazier; the Copper Campfire uses a
