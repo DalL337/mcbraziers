@@ -68,6 +68,9 @@ Not shipped in the mod.
 | Blockbench MCP headless server | Lets Claude Code read, edit, validate, convert, and render Blockbench models without the app | 1.10.1, pinned (below) | GPL-3.0 | owner decision, 2026-10-18 |
 | JUnit (Jupiter + Platform launcher) | Runs the recipe contract test in `./gradlew build` | 6.1.3 through `junit-bom`, pinned in `gradle.properties` (`junit_version`) | EPL-2.0 | fast path, 2026-10-18 |
 | Node.js | Runs the LORE checks and the brazier art generator (`tools/art`) | 24.14 on the owner's machine; the scripts use only Node's built-in modules, no npm packages | MIT | from existing state, 2026-10-18 |
+| GitHub Actions | CI: `.github/workflows/build.yml` runs `./gradlew build` on pull requests and on `main` | runner `ubuntu-24.04`; actions pinned by commit (below) | — (GitHub service) | owner decision, 2026-10-18 |
+| `actions/checkout` | Checks out the repository in CI | v7.0.1, pinned to commit `3d3c42e5aac5ba805825da76410c181273ba90b1` | MIT | owner decision, 2026-10-18 |
+| `actions/setup-java` | Installs Temurin Java 25 in CI and caches Gradle's files | v6.0.1, pinned to commit `de7274f081f381c8f8158605e0321c36c376e2e6` | MIT | owner decision, 2026-10-18 |
 
 > **Addendum (2026-10-18, art generator):** `tools/art/brazier-art.mjs` writes
 > the brazier textures and floor part models (`docs/plans/art/copper-brazier-art.md`).
@@ -83,6 +86,50 @@ Not shipped in the mod.
 > (`docs/plans/recipes/brief-recipe-contract.md`, Enforcement). Fabric's
 > data-generation and game-test modules come with Fabric API, which is already
 > registered, and add no new dependency.
+
+### CI on GitHub Actions (added 2026-10-18, owner decision)
+
+- **Decision:** the owner asked to check CI before merging PR #1. The repository
+  had none, and the owner picked a workflow running `./gradlew build` on PR #1's
+  branch: it compiles, runs the unit tests and the headless game tests. The
+  client tests need a display and are not in CI yet.
+- **Not the fast path:** CI runs third-party code and downloads on GitHub's
+  machines, a new execution surface (`lore/policies/tooling.md` §4.1), so it takes
+  the full review below.
+- **Options considered:**
+  - *No CI*: local checks stay the only evidence.
+  - *Gradle's own actions* (`gradle/actions` setup-gradle and
+    wrapper-validation, MIT): better caching, but a third-party action with
+    more code and access.
+  - *Chosen*: only GitHub's first-party actions, plus a shell step that checks
+    the wrapper jar against Gradle's published checksum.
+- **Pinning:** each action is pinned to a full commit SHA, not a tag, which can
+  move. Both tags resolve to verified commits. Releases had to be at least two
+  weeks old: `actions/setup-java` v6.1.0, 4 days old, was skipped for v6.0.1.
+  The runner image is pinned to `ubuntu-24.04`, not `ubuntu-latest`. The
+  wrapper jar's sha256
+  (`7a9ce74cff467ca1bf60a4fcd9f05185acceda4d0f382434d393e17864262c5d`) is
+  pinned in the workflow and must be updated with the wrapper.
+- **Security review** (`lore/policies/security.md` Rule 2):
+  - *Pinned and verified*: the two actions (commit SHAs); the Gradle wrapper jar
+    (sha256 checked in CI); the Gradle distribution (`distributionSha256Sum`).
+  - *Runtime downloads not hash-verified*: Temurin Java 25 from Adoptium (by
+    `setup-java`); the Maven dependencies and Minecraft's files. This is the
+    same exposure as a local build, which has no dependency verification
+    either.
+  - *Access*: the workflow token is read-only (`contents: read`), checkout keeps
+    no credentials (`persist-credentials: false`), and the workflow uses no
+    secrets.
+  - *Residual risk*:
+    - a compromised dependency or JDK download would run in CI, as it would
+      locally;
+    - GitHub's own runner and service are trusted as-is;
+    - the build cache (`setup-java` `cache: gradle`) is restored from earlier
+      runs of this repository.
+- **Linux needed one fix:** `gradlew` had been committed without its executable
+  bit, which Windows doesn't track, so Linux could not run it. The bit is now
+  set.
+- **Rationale:** local research journal `.research/2026-10-18-ci-github-actions.md`.
 
 ### Blockbench MCP Headless Server (added 2026-10-18, owner decision)
 
