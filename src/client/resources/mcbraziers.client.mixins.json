@@ -1,0 +1,15 @@
+{
+    "required": true,
+    "package": "com.dai.mcbraziers.mixin.client",
+    "compatibilityLevel": "JAVA_25",
+    "client": [
+        "CampfireRendererMixin",
+        "CampfireRenderStateMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "overwrites": {
+        "requireAnnotations": true
+    }
+}
