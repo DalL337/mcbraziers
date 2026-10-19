@@ -3,12 +3,16 @@
     "id": "mcbraziers",
     "version": "${version}",
     "name": "MC Braziers",
-    "description": "Tiered brazier blocks with cooking, particles, and light level progression from copper to obsidian.",
+    "description": "Vanilla+ braziers: campfires held in cages of bars. Six tiers from copper to netherite, four fire types, floor, wall and hanging placement, connected fire pits, cooking, and copper that ages.",
     "authors": [
         "dai"
     ],
-    "contact": {},
-    "license": "All-Rights-Reserved",
+    "contact": {
+        "homepage": "https://github.com/DalL337/mcbraziers",
+        "sources": "https://github.com/DalL337/mcbraziers",
+        "issues": "https://github.com/DalL337/mcbraziers/issues"
+    },
+    "license": "MIT",
     "environment": "*",
     "entrypoints": {
         "main": [
