@@ -1,0 +1,15 @@
+{
+  "model": {
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:model",
+        "model": "mcbraziers:block/amethyst_campfire"
+      },
+      {
+        "type": "minecraft:model",
+        "model": "mcbraziers:block/amethyst_campfire_fire"
+      }
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+# Builds MC Braziers and runs its unit and headless game tests on every pull request and on main.
+# Pinned actions and the security review: docs/TOOLING.md (Dev Tools, CI addendum).
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # Gradle 9.7.1's published wrapper checksum (services.gradle.org); update it with the wrapper
+      - name: Verify the Gradle wrapper
+        run: echo "7a9ce74cff467ca1bf60a4fcd9f05185acceda4d0f382434d393e17864262c5d  gradle/wrapper/gradle-wrapper.jar" | sha256sum --check
+
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: gradle
+
+      # Compiles, then runs the unit tests (recipe contract) and the headless game tests. javac reports
+      # warnings without failing, so this step fails on them itself: the check suite allows none.
+      - name: Build and test
+        shell: bash
+        run: |
+          ./gradlew build --stacktrace 2>&1 | tee build.log
+          if grep -E '\.java:[0-9]+: warning:' build.log; then
+            echo "::error::The build has compiler warnings"
+            exit 1
+          fi

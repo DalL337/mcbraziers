@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "waxed_copper_fire_copper_brazier",
+  "ingredients": [
+    "mcbraziers:weathered_copper_fire_copper_brazier",
+    "minecraft:honeycomb"
+  ],
+  "result": {
+    "id": "mcbraziers:waxed_weathered_copper_fire_copper_brazier"
+  }
+}

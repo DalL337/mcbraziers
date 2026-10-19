@@ -1,0 +1,7 @@
+{
+  "parent": "mcbraziers:block/brazier/ceiling_cage",
+  "textures": {
+    "body": "mcbraziers:block/exposed_copper_brazier",
+    "chain": "minecraft:block/exposed_copper_chain"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "mcbraziers:block/brazier/floor_bridge_ccw_east",
+  "textures": {
+    "body": "mcbraziers:block/crying_obsidian_brazier"
+  }
+}

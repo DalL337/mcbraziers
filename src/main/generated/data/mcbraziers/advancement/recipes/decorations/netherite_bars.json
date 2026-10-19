@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_diamond_bars": {
+      "conditions": {
+        "items": [
+          {
+            "items": "mcbraziers:diamond_bars"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_netherite_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:netherite_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "mcbraziers:netherite_bars"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_diamond_bars",
+      "has_netherite_ingot"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "mcbraziers:netherite_bars"
+    ]
+  }
+}

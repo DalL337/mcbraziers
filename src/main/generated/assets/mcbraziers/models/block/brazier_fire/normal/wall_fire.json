@@ -1,0 +1,6 @@
+{
+  "parent": "mcbraziers:block/brazier/wall_fire",
+  "textures": {
+    "fire": "minecraft:block/campfire_fire"
+  }
+}

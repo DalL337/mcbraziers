@@ -1,0 +1,6 @@
+{
+  "parent": "mcbraziers:block/brazier/floor_grate_corner_north",
+  "textures": {
+    "body": "mcbraziers:block/weathered_copper_brazier"
+  }
+}

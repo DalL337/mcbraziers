@@ -1,0 +1,57 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "mcbraziers:exposed_copper_brazier",
+            "state": {
+              "fire": "normal"
+            }
+          },
+          "name": "mcbraziers:exposed_copper_brazier"
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "mcbraziers:exposed_copper_brazier",
+            "state": {
+              "fire": "soul"
+            }
+          },
+          "name": "mcbraziers:exposed_soul_copper_brazier"
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "mcbraziers:exposed_copper_brazier",
+            "state": {
+              "fire": "copper"
+            }
+          },
+          "name": "mcbraziers:exposed_copper_fire_copper_brazier"
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "mcbraziers:exposed_copper_brazier",
+            "state": {
+              "fire": "amethyst"
+            }
+          },
+          "name": "mcbraziers:exposed_amethyst_fire_copper_brazier"
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

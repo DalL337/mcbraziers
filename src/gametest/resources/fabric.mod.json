@@ -1,0 +1,28 @@
+{
+    "schemaVersion": 1,
+    "id": "mcbraziers-gametest",
+    "version": "1.0.0",
+    "name": "MC Braziers game tests",
+    "environment": "*",
+    "entrypoints": {
+        "fabric-gametest": [
+            "com.dai.mcbraziers.gametest.RecipeGameTests",
+            "com.dai.mcbraziers.gametest.BrazierControlGameTests",
+            "com.dai.mcbraziers.gametest.CookingSpeedGameTests",
+            "com.dai.mcbraziers.gametest.WaterGameTests",
+            "com.dai.mcbraziers.gametest.SpecialsAndMiningGameTests",
+            "com.dai.mcbraziers.gametest.CopperAgingGameTests",
+            "com.dai.mcbraziers.gametest.BrazierCageGameTests"
+        ],
+        "fabric-client-gametest": [
+            "com.dai.mcbraziers.gametest.FireParticleClientGameTest",
+            "com.dai.mcbraziers.gametest.BrazierArtClientGameTest"
+        ]
+    },
+    "mixins": [
+        "mcbraziers-gametest.mixins.json"
+    ],
+    "depends": {
+        "mcbraziers": "*"
+    }
+}

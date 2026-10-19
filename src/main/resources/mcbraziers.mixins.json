@@ -1,0 +1,14 @@
+{
+    "required": true,
+    "package": "com.dai.mcbraziers.mixin",
+    "compatibilityLevel": "JAVA_25",
+    "mixins": [
+        "AbstractThrownPotionMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "overwrites": {
+        "requireAnnotations": true
+    }
+}

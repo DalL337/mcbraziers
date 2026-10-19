@@ -1,0 +1,6 @@
+{
+  "parent": "mcbraziers:block/brazier/floor_bed",
+  "textures": {
+    "embers": "mcbraziers:block/brazier_embers_lit"
+  }
+}

@@ -1,0 +1,7 @@
+{
+    "parent": "minecraft:block/template_bars_side_alt",
+    "textures": {
+        "bars": "mcbraziers:block/diamond_bars",
+        "edge": "mcbraziers:block/diamond_bars"
+    }
+}

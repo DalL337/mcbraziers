@@ -1,0 +1,37 @@
+{
+    "schemaVersion": 1,
+    "id": "mcbraziers",
+    "version": "${version}",
+    "name": "MC Braziers",
+    "description": "Tiered brazier blocks with cooking, particles, and light level progression from copper to obsidian.",
+    "authors": [
+        "dai"
+    ],
+    "contact": {},
+    "license": "All-Rights-Reserved",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "com.dai.mcbraziers.McBraziers"
+        ],
+        "client": [
+            "com.dai.mcbraziers.client.McBraziersClient"
+        ],
+        "fabric-datagen": [
+            "com.dai.mcbraziers.datagen.McBraziersDataGenerator"
+        ]
+    },
+    "mixins": [
+        "mcbraziers.mixins.json",
+        {
+            "config": "mcbraziers.client.mixins.json",
+            "environment": "client"
+        }
+    ],
+    "depends": {
+        "fabricloader": ">=0.19.5",
+        "minecraft": "~26.3",
+        "java": ">=25",
+        "fabric-api": "*"
+    }
+}

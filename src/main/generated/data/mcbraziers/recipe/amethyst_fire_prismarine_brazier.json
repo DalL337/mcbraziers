@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "prismarine_brazier",
+  "key": {
+    "B": "mcbraziers:prismarine_bars",
+    "C": "mcbraziers:amethyst_campfire"
+  },
+  "pattern": [
+    "BBB",
+    "BCB",
+    "BBB"
+  ],
+  "result": {
+    "id": "mcbraziers:amethyst_fire_prismarine_brazier"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "X": "mcbraziers:diamond_bars",
+    "Y": "minecraft:netherite_ingot"
+  },
+  "pattern": [
+    "XXX",
+    "XYX",
+    "XXX"
+  ],
+  "result": {
+    "count": 8,
+    "id": "mcbraziers:netherite_bars"
+  }
+}

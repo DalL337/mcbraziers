@@ -1,0 +1,69 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "#body"
+  },
+  "elements": [
+    {
+      "from": [13, 1, 0],
+      "to": [14, 3, 2],
+      "faces": {
+        "north": {
+          "uv": [0, 2, 1, 4],
+          "texture": "#body"
+        },
+        "east": {
+          "uv": [0, 2, 2, 4],
+          "texture": "#body"
+        },
+        "south": {
+          "uv": [0, 2, 1, 4],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [0, 2, 2, 4],
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [0, 2, 1, 4],
+          "texture": "#body"
+        },
+        "down": {
+          "uv": [0, 2, 1, 4],
+          "texture": "#body"
+        }
+      }
+    },
+    {
+      "from": [14, 11, 0],
+      "to": [14.5, 13, 1.5],
+      "faces": {
+        "north": {
+          "uv": [0, 0, 0.5, 2],
+          "texture": "#body"
+        },
+        "east": {
+          "uv": [0, 0, 1.5, 2],
+          "texture": "#body"
+        },
+        "south": {
+          "uv": [0, 0, 0.5, 2],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [0, 0, 1.5, 2],
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [0, 0, 0.5, 1.5],
+          "texture": "#body"
+        },
+        "down": {
+          "uv": [0, 0, 0.5, 1.5],
+          "texture": "#body"
+        }
+      }
+    }
+  ],
+  "ambientocclusion": false
+}

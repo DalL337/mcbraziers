@@ -1,0 +1,17 @@
+{
+  "sources": [
+    {
+      "type": "mcbraziers:recolor",
+      "source": "minecraft:particle/soul_fire_flame",
+      "sprite": "mcbraziers:amethyst_fire_flame",
+      "ramp": [
+        "#3b0890",
+        "#6006ab",
+        "#8308e4",
+        "#a65cf0",
+        "#cfa0f3",
+        "#fdf1ff"
+      ]
+    }
+  ]
+}

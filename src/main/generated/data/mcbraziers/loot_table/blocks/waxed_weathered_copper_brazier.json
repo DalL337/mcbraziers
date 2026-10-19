@@ -1,0 +1,57 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "mcbraziers:waxed_weathered_copper_brazier",
+            "state": {
+              "fire": "normal"
+            }
+          },
+          "name": "mcbraziers:waxed_weathered_copper_brazier"
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "mcbraziers:waxed_weathered_copper_brazier",
+            "state": {
+              "fire": "soul"
+            }
+          },
+          "name": "mcbraziers:waxed_weathered_soul_copper_brazier"
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "mcbraziers:waxed_weathered_copper_brazier",
+            "state": {
+              "fire": "copper"
+            }
+          },
+          "name": "mcbraziers:waxed_weathered_copper_fire_copper_brazier"
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "mcbraziers:waxed_weathered_copper_brazier",
+            "state": {
+              "fire": "amethyst"
+            }
+          },
+          "name": "mcbraziers:waxed_weathered_amethyst_fire_copper_brazier"
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

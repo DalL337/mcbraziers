@@ -1,0 +1,57 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "mcbraziers:prismarine_brazier",
+            "state": {
+              "fire": "normal"
+            }
+          },
+          "name": "mcbraziers:prismarine_brazier"
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "mcbraziers:prismarine_brazier",
+            "state": {
+              "fire": "soul"
+            }
+          },
+          "name": "mcbraziers:soul_prismarine_brazier"
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "mcbraziers:prismarine_brazier",
+            "state": {
+              "fire": "copper"
+            }
+          },
+          "name": "mcbraziers:copper_fire_prismarine_brazier"
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "mcbraziers:prismarine_brazier",
+            "state": {
+              "fire": "amethyst"
+            }
+          },
+          "name": "mcbraziers:amethyst_fire_prismarine_brazier"
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

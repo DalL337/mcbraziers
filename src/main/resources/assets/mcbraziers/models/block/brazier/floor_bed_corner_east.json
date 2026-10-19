@@ -1,0 +1,18 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "#embers"
+  },
+  "elements": [
+    {
+      "from": [13, 1, 13],
+      "to": [16, 1.5, 16],
+      "faces": {
+        "up": {
+          "uv": [13, 13, 16, 16],
+          "texture": "#embers"
+        }
+      }
+    }
+  ]
+}

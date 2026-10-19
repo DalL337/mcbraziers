@@ -1,0 +1,16 @@
+{
+    "required": true,
+    "package": "com.dai.mcbraziers.gametest.mixin",
+    "compatibilityLevel": "JAVA_25",
+    "client": [
+        "ClientLevelParticleLogMixin",
+        "SingleQuadParticleAccessor",
+        "SpriteContentsAccessor"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "overwrites": {
+        "requireAnnotations": true
+    }
+}

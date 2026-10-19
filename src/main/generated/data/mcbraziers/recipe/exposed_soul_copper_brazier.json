@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "exposed_copper_brazier",
+  "key": {
+    "B": "minecraft:exposed_copper_bars",
+    "C": "minecraft:soul_campfire"
+  },
+  "pattern": [
+    "BBB",
+    "BCB",
+    "BBB"
+  ],
+  "result": {
+    "id": "mcbraziers:exposed_soul_copper_brazier"
+  }
+}

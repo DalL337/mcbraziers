@@ -1,0 +1,6 @@
+{
+  "parent": "mcbraziers:block/brazier/wall_bed_bridge_west",
+  "textures": {
+    "embers": "mcbraziers:block/brazier_embers"
+  }
+}

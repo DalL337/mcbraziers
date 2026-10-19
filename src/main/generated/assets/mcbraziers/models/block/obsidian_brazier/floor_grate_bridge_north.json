@@ -1,0 +1,6 @@
+{
+  "parent": "mcbraziers:block/brazier/floor_grate_bridge_north",
+  "textures": {
+    "body": "mcbraziers:block/obsidian_brazier"
+  }
+}

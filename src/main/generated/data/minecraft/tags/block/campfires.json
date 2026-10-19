@@ -1,0 +1,20 @@
+{
+  "values": [
+    "mcbraziers:copper_brazier",
+    "mcbraziers:exposed_copper_brazier",
+    "mcbraziers:weathered_copper_brazier",
+    "mcbraziers:oxidized_copper_brazier",
+    "mcbraziers:waxed_copper_brazier",
+    "mcbraziers:waxed_exposed_copper_brazier",
+    "mcbraziers:waxed_weathered_copper_brazier",
+    "mcbraziers:waxed_oxidized_copper_brazier",
+    "mcbraziers:iron_brazier",
+    "mcbraziers:diamond_brazier",
+    "mcbraziers:obsidian_brazier",
+    "mcbraziers:crying_obsidian_brazier",
+    "mcbraziers:prismarine_brazier",
+    "mcbraziers:netherite_brazier",
+    "mcbraziers:copper_campfire",
+    "mcbraziers:amethyst_campfire"
+  ]
+}

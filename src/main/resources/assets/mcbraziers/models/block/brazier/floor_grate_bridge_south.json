@@ -1,0 +1,23 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "#body"
+  },
+  "elements": [
+    {
+      "from": [2.3, 12, 13.7],
+      "to": [13.7, 13, 16],
+      "faces": {
+        "up": {
+          "uv": [4.3, 11.7, 15.7, 14],
+          "texture": "#body"
+        },
+        "down": {
+          "uv": [4.3, 14, 15.7, 11.7],
+          "texture": "#body"
+        }
+      }
+    }
+  ],
+  "ambientocclusion": false
+}

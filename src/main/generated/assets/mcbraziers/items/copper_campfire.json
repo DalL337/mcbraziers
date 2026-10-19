@@ -1,0 +1,21 @@
+{
+  "model": {
+    "type": "minecraft:composite",
+    "models": [
+      {
+        "type": "minecraft:model",
+        "model": "mcbraziers:block/copper_campfire"
+      },
+      {
+        "type": "minecraft:model",
+        "model": "mcbraziers:block/copper_campfire_fire",
+        "tints": [
+          {
+            "type": "minecraft:constant",
+            "value": -4194445
+          }
+        ]
+      }
+    ]
+  }
+}
