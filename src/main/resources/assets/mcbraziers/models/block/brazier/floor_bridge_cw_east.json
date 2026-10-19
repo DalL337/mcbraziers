@@ -1,0 +1,73 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "#body"
+  },
+  "elements": [
+    {
+      "from": [14, 1, 13],
+      "to": [16, 3, 14],
+      "faces": {
+        "east": {
+          "uv": [0, 2, 1, 4],
+          "texture": "#body"
+        },
+        "south": {
+          "uv": [0, 2, 2, 4],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [0, 2, 1, 4],
+          "texture": "#body"
+        },
+        "north": {
+          "uv": [0, 2, 2, 4],
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [0, 2, 1, 4],
+          "texture": "#body",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [0, 2, 1, 4],
+          "texture": "#body",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "from": [14.5, 11, 14],
+      "to": [16, 13, 14.5],
+      "faces": {
+        "east": {
+          "uv": [0, 0, 0.5, 2],
+          "texture": "#body"
+        },
+        "south": {
+          "uv": [0, 0, 1.5, 2],
+          "texture": "#body"
+        },
+        "west": {
+          "uv": [0, 0, 0.5, 2],
+          "texture": "#body"
+        },
+        "north": {
+          "uv": [0, 0, 1.5, 2],
+          "texture": "#body"
+        },
+        "up": {
+          "uv": [0, 0, 0.5, 1.5],
+          "texture": "#body",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [0, 0, 0.5, 1.5],
+          "texture": "#body",
+          "rotation": 270
+        }
+      }
+    }
+  ],
+  "ambientocclusion": false
+}

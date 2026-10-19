@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_bars_cap",
+  "textures": {
+    "bars": "mcbraziers:block/crying_obsidian_bars_3",
+    "edge": "mcbraziers:block/crying_obsidian_bars_3"
+  }
+}

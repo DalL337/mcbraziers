@@ -1,0 +1,17 @@
+{
+  "sources": [
+    {
+      "type": "mcbraziers:recolor",
+      "source": "minecraft:block/soul_campfire_fire",
+      "sprite": "mcbraziers:block/amethyst_campfire_fire",
+      "ramp": [
+        "#3b0890",
+        "#6006ab",
+        "#8308e4",
+        "#a65cf0",
+        "#cfa0f3",
+        "#fdf1ff"
+      ]
+    }
+  ]
+}

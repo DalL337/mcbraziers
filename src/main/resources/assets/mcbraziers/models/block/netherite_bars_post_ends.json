@@ -1,0 +1,7 @@
+{
+    "parent": "minecraft:block/template_bars_post_ends",
+    "textures": {
+        "bars": "mcbraziers:block/netherite_bars",
+        "edge": "mcbraziers:block/netherite_bars"
+    }
+}
