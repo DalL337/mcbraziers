@@ -1,0 +1,6 @@
+{
+  "parent": "mcbraziers:block/brazier/wall_corner_end_west",
+  "textures": {
+    "body": "mcbraziers:block/iron_brazier"
+  }
+}

@@ -182,6 +182,47 @@ there). It is the ingredient for green-fire braziers.
 Floor and wall braziers link into **connected fire pits** with neighbouring
 braziers (shared sides open up). Hanging braziers never connect.
 
+> **Addendum (2026-10-25, owner decision: growing fire pits and wall
+> corners):** Clicking a brazier grows its fire pit.
+> - Clicking the side of a floor brazier places a floor brazier beside it,
+>   joined to its pit, even out over air.
+> - Clicking either end of a wall brazier places the next one along the same
+>   wall, wherever that wall goes on. Where the wall stops at a block's
+>   outside corner, as at a pillar's edge, it places the outside corner piece
+>   in the corner block, turned toward the block's next face. Clicking that
+>   piece's open end, or the face itself, puts the next brazier on that face.
+>   Where the wall stops with no corner to turn, nothing is placed.
+> - Clicking the front of a wall brazier grows the run from the end nearer
+>   the click, as clicking that end does.
+> - Sneak-clicking places by the clicked face, as before: a wall brazier on
+>   the side of a floor brazier, or one mounted on the end or the front of a
+>   wall brazier.
+>
+> Wall runs turn **inside corners**: where two walls meet, the brazier in the
+> corner joins the runs on both walls into one L-shaped trough, bracketed to
+> one wall, the wall of the run it was placed from. **Outside corners** join
+> too: the corner piece in the block beside a block's edge joins the runs on
+> its two faces into one trough round the edge. It has no bracket; its
+> neighbours hold it, and it falls when neither is left. A brazier standing
+> out in front of another wall brazier doesn't join it, nor does one hung
+> on the end of a run where the wall goes on. The corner art is in
+> `docs/plans/art/copper-brazier-art.md` (Inside corners and Outside corners
+> addenda).
+
+> **Erratum (2026-10-25, owner's in-game test: outside corners turned too
+> eagerly):** "It should only wrap around a corner if there are perpendicular
+> faces that both have wall braziers." Past the end of its wall, a run goes on
+> straight: clicking the end of a wall brazier (or that half of its front)
+> where the wall stops places the next brazier beside it, facing the same way,
+> out over open space. A run can be strung this way across a gap to another
+> wall. A brazier with no wall behind it hangs from its run, and falls when it
+> joins no brazier beside it. The brazier beside a block's edge turns the
+> corner only when the block's next face has a run too, and its own run
+> doesn't go on past it. Clicking its open back still puts the next brazier on
+> that face, which turns the corner. This replaces "it places the outside
+> corner piece … turned toward the block's next face" and "where the wall
+> stops with no corner to turn, nothing is placed" above.
+
 ### Cooking
 
 - Any **closed-top** brazier cooks: a floor brazier with its grate closed, plus

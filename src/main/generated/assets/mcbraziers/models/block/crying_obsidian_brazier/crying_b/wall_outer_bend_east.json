@@ -1,0 +1,7 @@
+{
+  "parent": "mcbraziers:block/brazier/crying_b/wall_outer_bend_east",
+  "textures": {
+    "body": "mcbraziers:block/crying_obsidian_brazier",
+    "tears": "mcbraziers:block/crying_obsidian_brazier_tears"
+  }
+}

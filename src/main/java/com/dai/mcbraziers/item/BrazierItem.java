@@ -23,6 +23,12 @@ public class BrazierItem extends BlockItem {
         return this.fire;
     }
 
+    /** A click on a wall brazier's front grows its run from the nearer end (or nowhere, if that spot is taken). */
+    @Override
+    public @Nullable BlockPlaceContext updatePlacementContext(BlockPlaceContext context) {
+        return BrazierBlock.alongRun(context);
+    }
+
     @Override
     protected @Nullable BlockState getPlacementState(BlockPlaceContext context) {
         BlockState state = super.getPlacementState(context);

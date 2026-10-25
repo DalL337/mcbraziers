@@ -61,7 +61,9 @@ public class McBraziersModelProvider extends FabricModelProvider {
      * plan, Rework addendum). The arrangements are written by {@code tools/art/brazier-art.mjs}.
      */
     private static final Set<String> SLATTED_PARTS = Set.of("floor_side_north", "floor_side_east", "floor_side_south",
-            "floor_side_west", "wall_core", "wall_side_west", "wall_side_east", "ceiling_cage");
+            "floor_side_west", "wall_core", "wall_side_west", "wall_side_east", "wall_corner_core", "wall_corner_end_west",
+            "wall_corner_end_east", "wall_outer_bend_west", "wall_outer_bend_east", "wall_outer_arm_west", "wall_outer_arm_east",
+            "wall_corner_arm_west", "wall_corner_arm_east", "ceiling_cage");
     private static final List<String> CRYING_ARRANGEMENTS = List.of("crying_a", "crying_b", "crying_c");
 
     /** Blockstate turn for a wall brazier drawn facing north. */
@@ -241,18 +243,28 @@ public class McBraziersModelProvider extends FabricModelProvider {
 
     /**
      * Wall braziers, drawn facing north and turned for each facing. Their west and east sides (seen facing
-     * north) open into the next wall brazier along the same wall.
+     * north) open into the next wall brazier along the same wall. Joined on its front, a wall brazier is an
+     * inside corner: the corner parts replace the straight basket, with an arm forward and, on each side, an
+     * arm or a closed end, and a bracket to its wall. Joined on its back only, it is an outside corner: the
+     * same parts turned to face its back, held by its neighbours with no bracket.
      */
     private void addWall(BlockModelGenerators generators, MultiPartGenerator multipart, String texture) {
         for (Direction facing : SIDES) {
             VariantMutator turn = TURNS.get(facing);
+            BooleanProperty front = CONNECTED.get(facing);
+            BooleanProperty back = CONNECTED.get(facing.getOpposite());
             Supplier<ConditionBuilder> wall = () -> placed(BrazierPlacement.WALL).term(CampfireBlock.FACING, facing);
-            multipart.with(wall.get(), part(generators, texture, "wall_core", BODY).with(turn));
+            Supplier<ConditionBuilder> straight = () -> wall.get().term(front, false).term(back, false);
+            Supplier<ConditionBuilder> inside = () -> wall.get().term(front, true);
+            multipart.with(straight.get(), part(generators, texture, "wall_core", BODY).with(turn));
             for (Direction drawn : List.of(Direction.WEST, Direction.EAST)) {
                 BooleanProperty connected = CONNECTED.get(turned(drawn, facing));
-                multipart.with(wall.get().term(connected, false), part(generators, texture, "wall_side_" + drawn.getName(), BODY).with(turn));
-                multipart.with(wall.get().term(connected, true), part(generators, texture, "wall_bridge_" + drawn.getName(), BODY).with(turn));
+                multipart.with(straight.get().term(connected, false), part(generators, texture, "wall_side_" + drawn.getName(), BODY).with(turn));
+                multipart.with(straight.get().term(connected, true), part(generators, texture, "wall_bridge_" + drawn.getName(), BODY).with(turn));
             }
+            multipart.with(inside.get(), part(generators, texture, "wall_corner_bracket", BODY).with(turn));
+            addWallCorner(generators, multipart, texture, inside, facing);
+            addWallOuterCorner(generators, multipart, texture, () -> wall.get().term(front, false).term(back, true), facing.getOpposite());
             addWallEmbers(generators, multipart, () -> wall.get().term(CampfireBlock.LIT, false), DEAD_EMBERS, facing);
             for (BrazierFire fire : BrazierFire.values()) {
                 Supplier<ConditionBuilder> lit = () -> wall.get().term(CampfireBlock.LIT, true).term(BrazierBlock.FIRE, fire);
@@ -262,13 +274,58 @@ public class McBraziersModelProvider extends FabricModelProvider {
         }
     }
 
+    /** A wall corner's basket, drawn facing {@code drawnFacing}: the junction, the arm forward, and an arm or end on each side. */
+    private void addWallCorner(BlockModelGenerators generators, MultiPartGenerator multipart, String texture,
+            Supplier<ConditionBuilder> when, Direction drawnFacing) {
+        VariantMutator turn = TURNS.get(drawnFacing);
+        multipart.with(when.get(), part(generators, texture, "wall_corner_core", BODY).with(turn));
+        multipart.with(when.get(), part(generators, texture, "wall_corner_front", BODY).with(turn));
+        for (Direction drawn : List.of(Direction.WEST, Direction.EAST)) {
+            BooleanProperty connected = CONNECTED.get(turned(drawn, drawnFacing));
+            multipart.with(when.get().term(connected, false), part(generators, texture, "wall_corner_end_" + drawn.getName(), BODY).with(turn));
+            multipart.with(when.get().term(connected, true), part(generators, texture, "wall_corner_arm_" + drawn.getName(), BODY).with(turn));
+        }
+    }
+
+    /**
+     * An outside corner, drawn like an inside corner facing {@code drawnFacing} (its back): the junction and the
+     * arm forward, and on each side an arm, or the bend of evenly spaced thin slats and tips round its outer
+     * face. No bracket; its neighbours hold it.
+     */
+    private void addWallOuterCorner(BlockModelGenerators generators, MultiPartGenerator multipart, String texture,
+            Supplier<ConditionBuilder> when, Direction drawnFacing) {
+        VariantMutator turn = TURNS.get(drawnFacing);
+        multipart.with(when.get(), part(generators, texture, "wall_outer_core", BODY).with(turn));
+        multipart.with(when.get(), part(generators, texture, "wall_corner_front", BODY).with(turn));
+        for (Direction drawn : List.of(Direction.WEST, Direction.EAST)) {
+            BooleanProperty connected = CONNECTED.get(turned(drawn, drawnFacing));
+            multipart.with(when.get().term(connected, false), part(generators, texture, "wall_outer_bend_" + drawn.getName(), BODY).with(turn));
+            multipart.with(when.get().term(connected, true), part(generators, texture, "wall_outer_arm_" + drawn.getName(), BODY).with(turn));
+        }
+    }
+
     private void addWallEmbers(BlockModelGenerators generators, MultiPartGenerator multipart, Supplier<ConditionBuilder> when,
             String embers, Direction facing) {
         VariantMutator turn = TURNS.get(facing);
-        multipart.with(when.get(), part(generators, embers, "wall_bed", EMBERS).with(turn));
+        BooleanProperty front = CONNECTED.get(facing);
+        BooleanProperty back = CONNECTED.get(facing.getOpposite());
+        multipart.with(when.get().term(front, false).term(back, false), part(generators, embers, "wall_bed", EMBERS).with(turn));
         for (Direction drawn : List.of(Direction.WEST, Direction.EAST)) {
-            multipart.with(when.get().term(CONNECTED.get(turned(drawn, facing)), true),
+            multipart.with(when.get().term(front, false).term(back, false).term(CONNECTED.get(turned(drawn, facing)), true),
                     part(generators, embers, "wall_bed_bridge_" + drawn.getName(), EMBERS).with(turn));
+        }
+        addCornerEmbers(generators, multipart, () -> when.get().term(front, true), embers, facing);
+        addCornerEmbers(generators, multipart, () -> when.get().term(front, false).term(back, true), embers, facing.getOpposite());
+    }
+
+    private void addCornerEmbers(BlockModelGenerators generators, MultiPartGenerator multipart, Supplier<ConditionBuilder> when,
+            String embers, Direction drawnFacing) {
+        VariantMutator turn = TURNS.get(drawnFacing);
+        multipart.with(when.get(), part(generators, embers, "wall_corner_bed", EMBERS).with(turn));
+        multipart.with(when.get(), part(generators, embers, "wall_corner_bed_front", EMBERS).with(turn));
+        for (Direction drawn : List.of(Direction.WEST, Direction.EAST)) {
+            multipart.with(when.get().term(CONNECTED.get(turned(drawn, drawnFacing)), true),
+                    part(generators, embers, "wall_corner_bed_arm_" + drawn.getName(), EMBERS).with(turn));
         }
     }
 

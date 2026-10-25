@@ -297,3 +297,110 @@ Approved by the owner on 2026-10-18 from mockups
 > - Build with no warnings; game tests 30 of 30.
 >
 > With this, every mod block and item has its final art.
+
+> **Addendum (2026-10-25, inside corners; owner decision, PRD Placement
+> addendum):** A wall brazier joined on its front is an inside corner: it turns
+> its run through a right angle into the run on the other wall. The owner
+> asked for a vanilla+ look, a bracket on one wall, and a plain gap at outside
+> corners, which get no piece.
+>
+> Drawn facing north (front at z 0, wall at z 16), in pixels:
+> - The basket narrows to an 8 px junction, x 4–12 by z 4–12, as wide as the
+>   run coming in from the front. It has a floor, a back wall with the two
+>   middle slats of a straight basket, a back rim and a grate. The same
+>   bracket holds it to this brazier's own wall.
+> - An arm reaches forward to the block edge (x 4–12, z 0–4). It is open like
+>   the bridges between braziers, and its low walls run on to the junction's
+>   corners, so the inside of the turn has no gap.
+> - Each side has an arm to the block edge (x 0–4 or 12–16) when the next
+>   brazier along this wall joins. Otherwise it closes with an end wall at x 4
+>   or x 12, with three slats and no tips.
+> - Ember bed pieces sit under each part. The wall fire is the straight wall
+>   brazier's, whose crossed flames fit inside the junction.
+> - Rims sit 0.5 px outside the walls. The hitbox runs from 3.5 to 12.5 px
+>   across a corner with closed ends, and to the block edge on the front and on
+>   a joined side. The bracket takes it from 0.5 to 14 px up and back to the
+>   wall. Food and the fire particles stay in the middle of the block, on the
+>   junction.
+>
+> A corner needs no new block state: it is a wall brazier whose front
+> connection is set. The parts are `wall_corner_*` in
+> `tools/art/brazier-art.mjs`. The slatted ones get the three crying
+> arrangements, numbered after the existing parts so stains already in the
+> world stay put.
+>
+> Checks:
+> - Build with no warnings; game tests 39 of 39. `BrazierPlacementGameTests`
+>   covers the joins, and the cage test covers the corner hitboxes and food,
+>   with the values above.
+> - The art client test checks every corner state for missing art. Its edge
+>   check now looks at the cage and the ember bed separately: before, a
+>   bridge's ember bed reaching the edge could hide a missing cage arm.
+> - Mutation checks, each caught: no corner at the front, joining behind, no
+>   corner arm on the side, a front joining any wall brazier, the corner
+>   hitbox ignored, and, in the client test, the corner's front arm and its
+>   front ember bed each left out.
+> - Screenshots in `temp/art/screenshots/`: `art-wall-corner*.png` (iron, by
+>   day, close up, from above, at night; copper bracketed to the other wall)
+>   and `art-wall-outside-corner.png` (the gap around a pillar).
+
+> **Addendum (2026-10-25, outside corners; owner decision after reviewing
+> mockups in game):** The block beside a wall block's outside edge, such as a
+> pillar's, holds an outside corner piece. It joins the runs on the block's two
+> faces into one trough round the edge. It is the inside corner's L turned to
+> face its back, which joins the run around the corner. It has no bracket; its
+> neighbours hold it.
+>
+> The owner's changes from the first mockup:
+> - **Slats:** thinner 1 px slats along the outer face, evenly every 5 px from
+>   the last slat of one run to the first slat of the other. The windows are an
+>   even 4 px round the bend, so more of the fire shows. The slat on the bend
+>   itself is a 1 px corner post.
+> - **Tips:** along the whole outer top edge, leaning out over each slat like
+>   the straight pieces' tips. Two rise from the corner post, one leaning out
+>   from each face of the turn. The owner turned down a diagonal finial as
+>   outside the design language. The inner face, toward the block's edge,
+>   stays open like the bridges, with no tips, as a straight brazier's back has
+>   none.
+>
+> The parts are `wall_outer_*` in `tools/art/brazier-art.mjs`: a shared
+> junction, and per side the closed "bend" or the arm, since the side the run
+> comes in from moves every slat. The arm forward is the inside corner's.
+> The inside corner's bracket is now its own part, `wall_corner_bracket`.
+> The hitbox is the inside corner's junction and arms without the bracket:
+> 4 to 13 px up, to the block edge behind and on a joined side, with the rim
+> of the closed side at 3.5 or 12.5 px.
+>
+> Checks: build with no warnings; game tests 45 of 45; client tests pass,
+> including a real-click wrap round a log pillar photographed from above
+> (`art-wall-outside-corner-placed*.png`) and a trough round three faces of
+> a pillar (`art-wall-outside-corner*.png`). Mutation checks, each caught:
+> nothing joining behind, no turn before the next run is placed, the piece
+> not held by its run, a brazier hung on a run's end against a continuing
+> wall counted as a corner, the open end's click facing the clicked side, no
+> corner turned at the edge, and the corner hitbox ignored.
+
+> **Erratum (2026-10-25, owner's in-game test):** The outside corner piece
+> forms only where both of the block's faces have runs. Otherwise the run goes
+> on straight past the edge (PRD Placement erratum), so "no turn before the
+> next run is placed" above is now the intended behavior, not a mutation. A
+> brazier strung out over open space draws the straight wall model, bracket
+> plate included, with no wall behind it (`art-wall-string-behind.png`).
+> Whether those braziers drop the bracket is the owner's call.
+
+> **Addendum (2026-10-25, owner decision):** Strung braziers keep the bracket
+> plate for now ("I am not too worried about it"). Dropping it would need a
+> new block-state property, which would double the brazier block states.
+
+> **Addendum (2026-10-25, inside corners: the room side of the turn; owner
+> decisions after a mockup in game):** On the room side of the turn, the
+> inside corner's arms were open like bridges. That left a 6 px window on
+> each face between the two runs' last slats, with no tips. Now a 1 px corner
+> post stands where the inner walls meet. A thin 1 px slat in the middle of
+> each face leaves even 2.5 px windows, as on the outside corner's bend, and
+> a tip leans out over each new slat. The post has no tips. The owner dropped
+> the mockup's two post tips: tips leaning out of a concave corner can't meet
+> cleanly in block geometry. The parts are in `wall_corner_arm_*`, which
+> crying obsidian now stains too. Checks: build with no warnings, game tests
+> 47 of 47, and the `wall-corners` client scenario run on its own
+> (`art-wall-corner*.png`, including the new `art-wall-corner-copper-turn`).
