@@ -20,8 +20,8 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 /**
  * Growing fire pits by clicking a brazier (owner's rulings, 2026-10-25; PRD Placement addendum): the side of
  * a floor brazier places a floor brazier beside it, even out over air; the end of a wall brazier continues
- * its run along the wall, where the wall goes on; sneaking places by the clicked face, as before. Wall runs
- * turn inside corners and stop with a gap at outside corners.
+ * its run along the wall, or around the corner where the wall stops; sneaking places by the clicked face, as
+ * before. Wall runs turn inside corners and leave the corner block empty at outside corners.
  */
 public class BrazierPlacementGameTests {
 
@@ -94,14 +94,16 @@ public class BrazierPlacementGameTests {
     }
 
     @GameTest
-    public void whereTheWallStopsTheEndOfARunMountsOnTheBrazierAsBefore(GameTestHelper helper) {
-        // A one-block pillar: past the brazier's east end there's no wall to continue on
+    public void whereTheWallStopsTheNextBrazierGoesAroundTheCorner(GameTestHelper helper) {
+        // A one-block pillar at (1, 2, 3): past the brazier's east end there's no wall to continue on, so the
+        // next brazier goes onto the pillar's east face, bracketed to the pillar, and the corner block stays empty
         BlockPos first = wallBrazier(helper, 1, 1, 1);
-        BlockPos mounted = first.east();
+        BlockPos cornerBlock = first.east();
+        BlockPos aroundTheCorner = new BlockPos(2, 2, 3);
         helper.placeAt(player(helper, false), brazierItem(), first, Direction.EAST);
-        helper.assertBlockProperty(mounted, BrazierBlock.PLACEMENT, BrazierPlacement.WALL);
-        helper.assertBlockProperty(mounted, CampfireBlock.FACING, Direction.EAST);
-        helper.assertBlockProperty(first, BrazierBlock.EAST_CONNECTED, false);
+        helper.assertBlockPresent(Blocks.AIR, cornerBlock);
+        helper.assertBlockProperty(aroundTheCorner, BrazierBlock.PLACEMENT, BrazierPlacement.WALL);
+        helper.assertBlockProperty(aroundTheCorner, CampfireBlock.FACING, Direction.EAST);
         helper.succeed();
     }
 
@@ -169,10 +171,13 @@ public class BrazierPlacementGameTests {
         BlockPos onEast = pillar.east();
         helper.placeAt(player(helper, false), brazierItem(), pillar, Direction.NORTH);
         helper.placeAt(player(helper, false), brazierItem(), pillar, Direction.EAST);
-        // Clicking the east run's north end: no wall goes on there, so the brazier mounts on that end and
-        // doesn't wrap around the pillar into the east run
+        // Clicking the east run's north end: the pillar's north face already has its brazier, so nothing is
+        // placed and the corner block stays empty
         BlockPos cornerBlock = onEast.north();
         helper.placeAt(player(helper, false), brazierItem(), onEast, Direction.NORTH);
+        helper.assertBlockPresent(Blocks.AIR, cornerBlock);
+        // Sneaking mounts one on that end, as before; nothing joins behind a wall brazier, so it stays apart
+        helper.placeAt(player(helper, true), brazierItem(), onEast, Direction.NORTH);
         helper.assertBlockProperty(cornerBlock, CampfireBlock.FACING, Direction.NORTH);
         helper.assertBlockProperty(onEast, BrazierBlock.NORTH_CONNECTED, false);
         helper.assertBlockProperty(cornerBlock, BrazierBlock.SOUTH_CONNECTED, false);

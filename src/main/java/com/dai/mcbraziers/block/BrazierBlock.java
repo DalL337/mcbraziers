@@ -359,8 +359,8 @@ public class BrazierBlock extends CampfireBlock {
 
     /**
      * A wall brazier faces the clicked side, except that clicking either end of a wall brazier continues
-     * its run along the same wall, wherever that wall goes on. Where it stops, as at a pillar's edge, the
-     * brazier faces the clicked side as before.
+     * its run along the same wall, wherever that wall goes on. Where it stops, {@link #aroundOutsideCorner}
+     * has already moved the click around the corner.
      */
     private static Direction wallFacing(BlockPlaceContext ctx, BlockState against, Direction side) {
         if (growsFrom(ctx, against, BrazierPlacement.WALL)) {
@@ -371,6 +371,32 @@ public class BrazierBlock extends CampfireBlock {
             }
         }
         return side;
+    }
+
+    /**
+     * Where a brazier goes when the click is on the end of a wall run whose wall stops there, as at a
+     * pillar's edge (owner, 2026-10-25): around the corner, on the wall block's next face, bracketed to that
+     * block, so the corner block stays empty. When that face is taken or can't hold a brazier, nothing is
+     * placed. Every other click, and any click while sneaking, places where it lands.
+     *
+     * @return the click to place from, or null to place nothing
+     */
+    public static @Nullable BlockPlaceContext aroundOutsideCorner(BlockPlaceContext ctx) {
+        Direction side = ctx.getClickedFace();
+        BlockState against = placedAgainst(ctx);
+        if (!side.getAxis().isHorizontal() || !growsFrom(ctx, against, BrazierPlacement.WALL)) {
+            return ctx;
+        }
+        Direction run = against.getValue(FACING);
+        Level level = ctx.getLevel();
+        // The block beside the wall's end, where the run's wall would have gone on
+        BlockPos around = ctx.getClickedPos().relative(run.getOpposite());
+        if (side.getAxis() == run.getAxis() || level.getBlockState(around).isFaceSturdy(level, around, run)) {
+            return ctx;
+        }
+        BlockPos wallBlock = around.relative(side.getOpposite());
+        BlockPlaceContext wrapped = BlockPlaceContext.at(ctx, around, side);
+        return wrapped.replacingClickedOnBlock() && level.getBlockState(wallBlock).isFaceSturdy(level, wallBlock, side) ? wrapped : null;
     }
 
     @Override
