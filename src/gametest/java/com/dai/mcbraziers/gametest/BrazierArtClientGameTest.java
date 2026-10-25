@@ -170,6 +170,30 @@ public class BrazierArtClientGameTest implements FabricClientGameTest {
             context.waitTicks(30);
             context.takeScreenshot(TestScreenshotOptions.of("art-wall-mount-netherite").withSize(1280, 720));
 
+            // Wall corners: the iron inside corner from the room, close up, from above and at night; the copper
+            // one, bracketed to the other wall; and the gap around the pillar's outside corner
+            server.runCommand("tp @a -55.5 " + (GROUND + 4.2) + " 3.5 -143 13");
+            checkWallCorner(context);
+            singleplayer.getConnection().waitForChunksRender();
+            context.waitTicks(30);
+            context.takeScreenshot(TestScreenshotOptions.of("art-wall-corner").withSize(1280, 720));
+            server.runCommand("tp @a -54.5 " + (GROUND + 2.9) + " 1 -127 16");
+            context.waitTicks(30);
+            context.takeScreenshot(TestScreenshotOptions.of("art-wall-corner-close-up").withSize(1280, 720));
+            server.runCommand("tp @a -52.5 " + (GROUND + 5.6) + " 1.3 180 50");
+            context.waitTicks(30);
+            context.takeScreenshot(TestScreenshotOptions.of("art-wall-corner-above").withSize(1280, 720));
+            server.runCommand("tp @a -44.5 " + (GROUND + 4.2) + " 3.5 143 13");
+            context.waitTicks(30);
+            context.takeScreenshot(TestScreenshotOptions.of("art-wall-corner-copper").withSize(1280, 720));
+            server.runCommand("tp @a -54.5 " + (GROUND + 4) + " 8.5 135 6");
+            context.waitTicks(30);
+            context.takeScreenshot(TestScreenshotOptions.of("art-wall-outside-corner").withSize(1280, 720));
+            server.runCommand("time set midnight");
+            server.runCommand("tp @a -55.5 " + (GROUND + 4.2) + " 3.5 -143 13");
+            context.waitTicks(40);
+            context.takeScreenshot(TestScreenshotOptions.of("art-wall-corner-night").withSize(1280, 720));
+
             // Copper and amethyst fire: a soul campfire, then each mod campfire with its brazier, at night
             server.runCommand("time set midnight");
             server.runCommand("tp @a 14.5 " + (GROUND + 0.6) + " 6.5 180 12");
@@ -264,17 +288,24 @@ public class BrazierArtClientGameTest implements FabricClientGameTest {
     }
 
     /**
-     * A brazier's model reaches the edge of its block exactly on the sides that join a neighbour: any side
-     * on the floor, the sides along the wall for a wall brazier (whose back plate sits on the wall), and
-     * none for a hanging brazier. Null when that holds.
+     * A brazier's cage and its ember bed each reach the edge of the block exactly on the sides that join a
+     * neighbour: any side on the floor, the sides along the wall and the front for a wall brazier (whose back
+     * plate sits on the wall), and none for a hanging brazier. Checking them apart means a missing bridge or
+     * arm shows even where the other still reaches the edge. Null when that holds.
      */
     private static String edgeProblem(BlockState state, BlockStateModel model) {
-        Set<Direction> reached = EnumSet.noneOf(Direction.class);
+        Set<Direction> cage = EnumSet.noneOf(Direction.class);
+        Set<Direction> bed = EnumSet.noneOf(Direction.class);
         List<BlockStateModelPart> parts = new ArrayList<>();
         model.collectParts(RandomSource.create(0), parts);
         for (BlockStateModelPart part : parts) {
             for (Direction side : new Direction[] {null, Direction.UP, Direction.DOWN, Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST}) {
                 for (BakedQuad quad : part.getQuads(side)) {
+                    Identifier sprite = quad.materialInfo().sprite().contents().name();
+                    if (FLAMES.contains(sprite)) {
+                        continue;
+                    }
+                    Set<Direction> reached = sprite.getPath().contains("embers") ? bed : cage;
                     for (Vector3fc corner : List.of(quad.position0(), quad.position1(), quad.position2(), quad.position3())) {
                         if (corner.x() < 1e-4f) reached.add(Direction.WEST);
                         if (corner.x() > 1 - 1e-4f) reached.add(Direction.EAST);
@@ -287,9 +318,10 @@ public class BrazierArtClientGameTest implements FabricClientGameTest {
         Set<Direction> joinable = switch (state.getValue(BrazierBlock.PLACEMENT)) {
             case FLOOR -> EnumSet.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
             case WALL -> {
+                // Joined on its front, a wall brazier turns an inside corner into the run in front of it
                 Direction facing = state.getValue(CampfireBlock.FACING);
-                reached.remove(facing.getOpposite());
-                yield EnumSet.of(facing.getClockWise(), facing.getCounterClockWise());
+                cage.remove(facing.getOpposite());
+                yield EnumSet.of(facing.getClockWise(), facing.getCounterClockWise(), facing);
             }
             case CEILING -> EnumSet.noneOf(Direction.class);
         };
@@ -299,7 +331,10 @@ public class BrazierArtClientGameTest implements FabricClientGameTest {
                 joined.add(side);
             }
         }
-        return reached.equals(joined) ? null : "reaches the block edge on " + reached + " but joins on " + joined;
+        if (!cage.equals(joined)) {
+            return "has its cage reach the block edge on " + cage + " but joins on " + joined;
+        }
+        return bed.equals(joined) ? null : "has its ember bed reach the block edge on " + bed + " but joins on " + joined;
     }
 
     private static final Map<Direction, BooleanProperty> CONNECTED = Map.of(
@@ -551,6 +586,33 @@ public class BrazierArtClientGameTest implements FabricClientGameTest {
      * Each item's pose is (layout) x (the item's own display transform). Taking the campfire's layout off
      * its pose leaves the item's own part, which must match the brazier's pose under the brazier's layout.
      */
+    /**
+     * The corner scene came out as built: the iron corner piece joins the run along the north wall and the one
+     * coming along the east wall, with its food drawn on the junction's grate as on a straight wall brazier,
+     * and the braziers around the pillar stay apart.
+     */
+    private static void checkWallCorner(ClientGameTestContext context) {
+        List<BlockPos> aroundPillar = List.of(new BlockPos(-58, GROUND + 3, 6), new BlockPos(-57, GROUND + 3, 5), new BlockPos(-59, GROUND + 3, 5));
+        // The client may still be loading the scene after the teleport
+        context.waitFor(minecraft -> minecraft.level != null && minecraft.level.getBlockState(ironCornerPos()).getBlock() instanceof BrazierBlock);
+        String problem = context.computeOnClient(minecraft -> {
+            BlockState corner = minecraft.level.getBlockState(ironCornerPos());
+            if (!corner.getValue(BrazierBlock.SOUTH_CONNECTED) || !corner.getValue(BrazierBlock.WEST_CONNECTED)
+                    || corner.getValue(BrazierBlock.EAST_CONNECTED)) {
+                return "the iron corner piece is " + corner;
+            }
+            for (BlockPos pos : aroundPillar) {
+                BlockState state = minecraft.level.getBlockState(pos);
+                if (CONNECTED.values().stream().anyMatch(state::getValue)) {
+                    return "a brazier around the pillar joins a neighbour: " + state;
+                }
+            }
+            return null;
+        });
+        check(problem == null, problem);
+        checkFood(context, ironCornerPos(), ON_WALL_GRATE, Direction.SOUTH, "the inside corner's grate");
+    }
+
     private static void checkFood(ClientGameTestContext context, BlockPos brazierPos, float[] layout, Direction facing, String where) {
         context.waitFor(minecraft -> minecraft.level != null
                 && minecraft.level.getBlockEntity(brazierPos) instanceof CampfireBlockEntity brazier && !brazier.getItems().get(1).isEmpty()
@@ -712,6 +774,41 @@ public class BrazierArtClientGameTest implements FabricClientGameTest {
             place(level, new BlockPos(x, GROUND + 5, 1), tierBrazier.setValue(BrazierBlock.CLOSED, true)
                     .setValue(BrazierBlock.PLACEMENT, BrazierPlacement.CEILING));
         }
+
+        // Wall corners (owner's rulings, 2026-10-25). Two rooms with walls on the north and one side: iron runs
+        // turning the corner with the bracket on the north wall, and copper runs turning it with the bracket on
+        // the west wall. A pillar in the iron room has braziers on two faces, with the gap of an outside corner.
+        fill(level, -63, GROUND, -3, -42, GROUND, 9, Blocks.STONE);
+        fill(level, -63, GROUND + 1, -2, -52, GROUND + 6, -2, Blocks.STONE);
+        fill(level, -52, GROUND + 1, -2, -52, GROUND + 6, 4, Blocks.STONE);
+        fill(level, -49, GROUND + 1, -2, -42, GROUND + 6, -2, Blocks.STONE);
+        fill(level, -49, GROUND + 1, -2, -49, GROUND + 6, 4, Blocks.STONE);
+        fill(level, -58, GROUND + 1, 5, -58, GROUND + 6, 5, Blocks.STONE);
+        BlockState iron = ModBlocks.BRAZIERS.get(new BrazierVariant(BrazierTier.IRON, "")).defaultBlockState()
+                .setValue(CampfireBlock.LIT, true).setValue(BrazierBlock.CLOSED, true).setValue(BrazierBlock.PLACEMENT, BrazierPlacement.WALL);
+        BlockState copper = brazier("", BrazierFire.SOUL, true, true).setValue(BrazierBlock.PLACEMENT, BrazierPlacement.WALL);
+        List<BlockPos> corners = new ArrayList<>();
+        for (int x = -57; x <= -54; x++) corners.add(placeWall(level, new BlockPos(x, GROUND + 3, -1), iron, Direction.SOUTH));
+        corners.add(placeWall(level, ironCornerPos(), iron, Direction.SOUTH));
+        for (int z = 0; z <= 2; z++) corners.add(placeWall(level, new BlockPos(-53, GROUND + 3, z), iron, Direction.WEST));
+        for (int x = -47; x <= -44; x++) corners.add(placeWall(level, new BlockPos(x, GROUND + 3, -1), copper, Direction.SOUTH));
+        corners.add(placeWall(level, new BlockPos(-48, GROUND + 3, -1), copper, Direction.EAST));
+        for (int z = 0; z <= 2; z++) corners.add(placeWall(level, new BlockPos(-48, GROUND + 3, z), copper, Direction.EAST));
+        corners.add(placeWall(level, new BlockPos(-58, GROUND + 3, 6), iron, Direction.SOUTH));
+        corners.add(placeWall(level, new BlockPos(-57, GROUND + 3, 5), iron, Direction.EAST));
+        corners.add(placeWall(level, new BlockPos(-59, GROUND + 3, 5), iron, Direction.WEST));
+        corners.forEach((pos) -> connect(level, pos));
+        addFood(level, ironCornerPos());
+    }
+
+    /** The iron inside corner: walls to its north and east, runs coming in from the west and the south. */
+    private static BlockPos ironCornerPos() {
+        return new BlockPos(-53, GROUND + 3, -1);
+    }
+
+    private static BlockPos placeWall(ServerLevel level, BlockPos pos, BlockState wall, Direction facing) {
+        place(level, pos, wall.setValue(CampfireBlock.FACING, facing));
+        return pos;
     }
 
     private static void addFood(ServerLevel level, BlockPos... positions) {

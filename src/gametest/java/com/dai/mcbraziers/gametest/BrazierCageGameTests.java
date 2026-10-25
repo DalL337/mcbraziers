@@ -105,6 +105,22 @@ public class BrazierCageGameTests {
         helper.setBlock(joinedEastFacing, wallBrazier(Direction.EAST).setValue(BrazierBlock.NORTH_CONNECTED, true));
         assertBounds(helper, joinedEastFacing, new AABB(0, 0.5, 0, 12.5, 14, 14.5), "an east-facing wall brazier joined on its north side");
 
+        // Inside corner (art plan, Inside corners addendum): joined on its front, the cage narrows to the 8 px
+        // junction (rims 3.5 to 12.5 px) and reaches forward to the block edge, and to the edge on a joined side
+        BlockPos cornerAlone = new BlockPos(1, 1, 4);
+        helper.setBlock(cornerAlone, wallBrazier(Direction.NORTH).setValue(BrazierBlock.NORTH_CONNECTED, true));
+        assertBounds(helper, cornerAlone, new AABB(3.5, 0.5, 0, 12.5, 14, 16), "a north-facing wall brazier joined only on its front");
+
+        BlockPos cornerWest = new BlockPos(3, 1, 4);
+        helper.setBlock(cornerWest, wallBrazier(Direction.NORTH).setValue(BrazierBlock.NORTH_CONNECTED, true)
+                .setValue(BrazierBlock.WEST_CONNECTED, true));
+        assertBounds(helper, cornerWest, new AABB(0, 0.5, 0, 12.5, 14, 16), "an inside corner facing north, joined front and west");
+
+        BlockPos cornerEastFacing = new BlockPos(5, 1, 4);
+        helper.setBlock(cornerEastFacing, wallBrazier(Direction.EAST).setValue(BrazierBlock.EAST_CONNECTED, true)
+                .setValue(BrazierBlock.SOUTH_CONNECTED, true));
+        assertBounds(helper, cornerEastFacing, new AABB(0, 0.5, 3.5, 16, 14, 16), "an inside corner facing east, joined front and south");
+
         // Hanging: a 10 px basket with its rim
         BlockPos hanging = new BlockPos(11, 1, 1);
         helper.setBlock(hanging, floorBrazier().setValue(BrazierBlock.PLACEMENT, BrazierPlacement.CEILING));
@@ -120,6 +136,9 @@ public class BrazierCageGameTests {
         // Wall: 4 px items on the 12 x 8 grate (top 13 px), which the bracket holds in the middle of the block.
         assertFood(helper, wallBrazier(Direction.NORTH), new FoodLayout(0.5f, 13.1875f / 16, 0.5f, 2f / 16, 0.25f), "wall facing north");
         assertFood(helper, wallBrazier(Direction.EAST), new FoodLayout(0.5f, 13.1875f / 16, 0.5f, 2f / 16, 0.25f), "wall facing east");
+        // An inside corner's 8 px junction is the middle of the block, where the four items sit
+        assertFood(helper, wallBrazier(Direction.NORTH).setValue(BrazierBlock.NORTH_CONNECTED, true).setValue(BrazierBlock.WEST_CONNECTED, true),
+                new FoodLayout(0.5f, 13.1875f / 16, 0.5f, 2f / 16, 0.25f), "inside corner");
         // Hanging: 4 px items on the 10 px grate, whose top is 12 px.
         assertFood(helper, floorBrazier().setValue(BrazierBlock.PLACEMENT, BrazierPlacement.CEILING),
                 new FoodLayout(0.5f, 12.1875f / 16, 0.5f, 2f / 16, 0.25f), "hanging");

@@ -443,6 +443,22 @@ function ceilingParts() {
   };
 }
 
+/** A span across a wall brazier drawn facing north: as given on its west side, mirrored onto its east. */
+const wallMirror = (side, x0, x1) => (side === 'west' ? [x0, x1] : [16 - x1, 16 - x0]);
+
+/** The wall bracket: plate with a cap, a foot and two rivets; the arm under the basket; the brace up to the arm. */
+function wallBracket() {
+  return [
+    atlasCube([7, 1, 15], [9, 13, 16], REGION.slat),
+    atlasCube([6.5, 13, 14.5], [9.5, 14, 16], REGION.rim),
+    atlasCube([6.5, 0.5, 14.5], [9.5, 1.5, 16], REGION.rim),
+    ...[3.5, 10.5].map((y) => atlasCube([7.5, y, 14.7], [8.5, y + 1, 15], REGION.rim)),
+    atlasCube([7, 3, 6], [9, 4, 15], REGION.slat),
+    atlasCube([7, 2.2, 6], [9, 3, 7], REGION.slat),
+    atlasCube([7, 0.3, 11.9], [9, 1.3, 15], REGION.slat, { rotation: { origin: [8, 0.8, 15], axis: 'x', angle: 45 } }),
+  ];
+}
+
 /**
  * Wall brazier, drawn facing north with the wall at z = 16; blockstates turn it for other facings. A
  * basket 12 wide and 8 deep, centred in the block and held off the wall by a bracket (owner's design,
@@ -451,7 +467,7 @@ function ceilingParts() {
  * along the same wall.
  */
 function wallParts() {
-  const mirror = (side, x0, x1) => (side === 'west' ? [x0, x1] : [16 - x1, 16 - x0]);
+  const mirror = wallMirror;
   const side = (s) => {
     const [w0, w1] = mirror(s, 2, 3), [s0, s1] = mirror(s, 2, 2.3), [r0, r1] = mirror(s, 1.5, 2);
     // The floor brazier's north tips, turned onto this side, two to a side either side of its middle.
@@ -487,14 +503,7 @@ function wallParts() {
     atlasCube([1.5, 11, 12], [14.5, 13, 12.5], REGION.rim),
     ...[2.1, 5.1, 9.1, 12.1].map((x) => tip(x, 13.7, 3.3, 5.3)),
     grateCube([2.3, 12, 4.3], [13.7, 13, 11.7]),
-    // Bracket: plate with a cap, a foot and two rivets; the arm under the basket; the brace up to the arm
-    atlasCube([7, 1, 15], [9, 13, 16], REGION.slat),
-    atlasCube([6.5, 13, 14.5], [9.5, 14, 16], REGION.rim),
-    atlasCube([6.5, 0.5, 14.5], [9.5, 1.5, 16], REGION.rim),
-    ...[3.5, 10.5].map((y) => atlasCube([7.5, y, 14.7], [8.5, y + 1, 15], REGION.rim)),
-    atlasCube([7, 3, 6], [9, 4, 15], REGION.slat),
-    atlasCube([7, 2.2, 6], [9, 3, 7], REGION.slat),
-    atlasCube([7, 0.3, 11.9], [9, 1.3, 15], REGION.slat, { rotation: { origin: [8, 0.8, 15], axis: 'x', angle: 45 } }),
+    ...wallBracket(),
   ];
   const parts = {
     wall_core: { slot: 'body', elements: core.map(resolveUvs) },
@@ -506,6 +515,67 @@ function wallParts() {
     parts[`wall_side_${s}`] = { slot: 'body', elements: side(s).map(resolveUvs) };
     parts[`wall_bridge_${s}`] = { slot: 'body', elements: bridge(s).map(resolveUvs) };
     parts[`wall_bed_bridge_${s}`] = { slot: 'embers', elements: [bedCube([b0, 5, 5], [b1, 5.5, 11])].map(resolveUvs) };
+  }
+  return parts;
+}
+
+/**
+ * Inside corner (owner's rulings, 2026-10-25): a wall brazier joined on its front turns its run through a
+ * right angle into the run coming along the other wall. Drawn facing north like the rest of the wall
+ * brazier, it narrows to an 8 px junction in the middle of the block, as wide as the run coming in from
+ * the front. An arm reaches forward into that run, and each side either reaches into the next brazier
+ * along this wall or closes with an end wall. Arms are open like the bridges between braziers; the bracket
+ * stays on this brazier's own wall. Outside corners have no piece: their runs stop at the edge with a gap.
+ */
+function wallCornerParts() {
+  const mirror = wallMirror;
+  const arm = (s) => {
+    const [a0, a1] = mirror(s, 0, 4), [f0, f1] = mirror(s, 0, 3.5), [g0, g1] = mirror(s, 0, 4.3);
+    return [
+      atlasCube([a0, 4, 4], [a1, 5, 12], REGION.basin),
+      atlasCube([a0, 5, 4], [a1, 7, 5], REGION.basin),
+      atlasCube([a0, 5, 11], [a1, 7, 12], REGION.basin),
+      atlasCube([f0, 11, 3.5], [f1, 13, 4], REGION.rim),
+      atlasCube([a0, 11, 12], [a1, 13, 12.5], REGION.rim),
+      grateCube([g0, 12, 4.3], [g1, 13, 11.7]),
+    ];
+  };
+  const end = (s) => {
+    const [w0, w1] = mirror(s, 4, 5), [s0, s1] = mirror(s, 4, 4.3), [r0, r1] = mirror(s, 3.5, 4);
+    return [
+      atlasCube([w0, 5, 5], [w1, 7, 11], REGION.basin),
+      ...[[4.3, 6], [7, 9], [10, 11.7]].map(([a, b]) => slatCube([s0, 7, a], [s1, 13, b])),
+      atlasCube([r0, 11, 4], [r1, 13, 12.5], REGION.rim),
+    ];
+  };
+  const parts = {
+    // Junction: floor, back wall with the two middle slats of a straight basket, back rim, grate, bracket
+    wall_corner_core: { slot: 'body', elements: [
+      atlasCube([4, 4, 4], [12, 5, 12], REGION.basin),
+      atlasCube([4, 5, 11], [12, 7, 12], REGION.basin),
+      ...[[5, 7], [9, 11]].map(([a, b]) => slatCube([a, 7, 11.7], [b, 13, 12])),
+      atlasCube([4, 11, 12], [12, 13, 12.5], REGION.rim),
+      grateCube([4.3, 12, 4.3], [11.7, 13, 11.7]),
+      ...wallBracket(),
+    ].map(resolveUvs) },
+    // Forward into the brazier in front, whose side bridge meets it at the block edge; its low walls run on
+    // to the junction's corners so the inside of the turn has no gap
+    wall_corner_front: { slot: 'body', elements: [
+      atlasCube([4, 4, 0], [12, 5, 4], REGION.basin),
+      atlasCube([4, 5, 0], [5, 7, 5], REGION.basin),
+      atlasCube([11, 5, 0], [12, 7, 5], REGION.basin),
+      atlasCube([3.5, 11, 0], [4, 13, 4], REGION.rim),
+      atlasCube([12, 11, 0], [12.5, 13, 4], REGION.rim),
+      grateCube([4.3, 12, 0], [11.7, 13, 4.3]),
+    ].map(resolveUvs) },
+    wall_corner_bed: { slot: 'embers', elements: [bedCube([5, 5, 5], [11, 5.5, 11])].map(resolveUvs) },
+    wall_corner_bed_front: { slot: 'embers', elements: [bedCube([5, 5, 0], [11, 5.5, 5])].map(resolveUvs) },
+  };
+  for (const s of ['west', 'east']) {
+    const [b0, b1] = mirror(s, 0, 5);
+    parts[`wall_corner_arm_${s}`] = { slot: 'body', elements: arm(s).map(resolveUvs) };
+    parts[`wall_corner_end_${s}`] = { slot: 'body', elements: end(s).map(resolveUvs) };
+    parts[`wall_corner_bed_arm_${s}`] = { slot: 'embers', elements: [bedCube([b0, 5, 5], [b1, 5.5, 11])].map(resolveUvs) };
   }
   return parts;
 }
@@ -613,13 +683,15 @@ function writePreviews(parts, pack) {
 }
 
 // Shared with the art mockup scripts, which import these instead of running the generator.
-export { atlasCube, bedCube, grateCube, turnElement, resolveUvs, writeJson, REGION, DIRS, floorParts, wallParts, ceilingParts };
+export { atlasCube, bedCube, grateCube, turnElement, resolveUvs, writeJson, REGION, DIRS, floorParts, wallParts, wallCornerParts, ceilingParts };
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   writeTextures();
   writeAtlases();
   writeCryingBars();
-  const parts = { ...floorParts(), ...wallParts(), ...ceilingParts(), ...campfireParts() };
+  // Crying arrangements number the slatted parts in this order, so later additions go last and the stains
+  // already in the world stay put.
+  const parts = { ...floorParts(), ...wallParts(), ...ceilingParts(), ...campfireParts(), ...wallCornerParts() };
   const crying = cryingParts(parts);
   writeModels({ ...parts, ...crying });
   if (PREVIEW) writePreviews(parts, PREVIEW);

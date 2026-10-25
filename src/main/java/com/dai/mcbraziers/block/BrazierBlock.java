@@ -86,9 +86,9 @@ public class BrazierBlock extends CampfireBlock {
     /** Hanging cage: the basket and its rim (models/block/brazier/ceiling_cage.json). */
     private static final VoxelShape CEILING_SHAPE = Shapes.or(Block.box(3, 1, 3, 13, 12, 13), Block.box(2.5, 10, 2.5, 13.5, 12, 13.5));
     /**
-     * Wall cage by facing, then by which sides join the next wall brazier (west 1, east 2, as drawn facing
-     * north): the basket and rim, and the bracket (plate, arm and brace), stretched to the block edge on a
-     * joined side.
+     * Wall cage by facing, then by which sides join the next wall brazier (west 1, east 2, front 4, as drawn
+     * facing north): the basket and rim, and the bracket (plate, arm and brace), stretched to the block edge
+     * on a joined side. Joined on the front, it's the inside-corner cage.
      */
     private static final Map<Direction, VoxelShape[]> WALL_SHAPES = wallShapes();
 
@@ -660,28 +660,39 @@ public class BrazierBlock extends CampfireBlock {
     }
 
     private static Map<Direction, VoxelShape[]> wallShapes() {
-        VoxelShape cage = Shapes.or(Block.box(2, 4, 4, 14, 13, 12), Block.box(1.5, 11, 3.5, 14.5, 13, 12.5),
-                Block.box(6.5, 0.5, 14.5, 9.5, 14, 16), Block.box(7, 2.2, 6, 9, 4, 15), Block.box(7, 0.5, 12.5, 9, 3, 15));
+        VoxelShape bracket = Shapes.or(Block.box(6.5, 0.5, 14.5, 9.5, 14, 16), Block.box(7, 2.2, 6, 9, 4, 15),
+                Block.box(7, 0.5, 12.5, 9, 3, 15));
+        VoxelShape cage = Shapes.or(Block.box(2, 4, 4, 14, 13, 12), Block.box(1.5, 11, 3.5, 14.5, 13, 12.5), bracket);
         VoxelShape westBridge = Block.box(0, 4, 3.5, 2, 13, 12.5);
         VoxelShape eastBridge = Block.box(14, 4, 3.5, 16, 13, 12.5);
+        // Inside corner (models/block/brazier/wall_corner_*.json): the 8 px junction with its back rim, the arm
+        // forward, and on each side an arm to the next brazier or the rim of a closed end
+        VoxelShape junction = Shapes.or(Block.box(4, 4, 4, 12, 13, 12), Block.box(4, 11, 12, 12, 13, 12.5),
+                Block.box(3.5, 4, 0, 12.5, 13, 4), bracket);
+        VoxelShape westArm = Block.box(0, 4, 3.5, 4, 13, 12.5);
+        VoxelShape westEnd = Block.box(3.5, 11, 4, 4, 13, 12.5);
+        VoxelShape eastArm = Block.box(12, 4, 3.5, 16, 13, 12.5);
+        VoxelShape eastEnd = Block.box(12, 11, 4, 12.5, 13, 12.5);
         Map<Direction, VoxelShape[]> shapes = new HashMap<>();
-        for (int joined = 0; joined < 4; joined++) {
-            VoxelShape north = cage;
-            if ((joined & 1) != 0) {
-                north = Shapes.or(north, westBridge);
-            }
-            if ((joined & 2) != 0) {
-                north = Shapes.or(north, eastBridge);
+        for (int joined = 0; joined < 8; joined++) {
+            VoxelShape north;
+            if ((joined & 4) == 0) {
+                north = Shapes.or(cage, (joined & 1) != 0 ? westBridge : Shapes.empty(), (joined & 2) != 0 ? eastBridge : Shapes.empty());
+            } else {
+                north = Shapes.or(junction, (joined & 1) != 0 ? westArm : westEnd, (joined & 2) != 0 ? eastArm : eastEnd);
             }
             Map<Direction, VoxelShape> turned = Shapes.rotateHorizontal(north.optimize());
             for (Direction facing : Direction.Plane.HORIZONTAL) {
-                shapes.computeIfAbsent(facing, f -> new VoxelShape[4])[joined] = turned.get(facing);
+                shapes.computeIfAbsent(facing, f -> new VoxelShape[8])[joined] = turned.get(facing);
             }
         }
         return shapes;
     }
 
-    /** The wall cage for its facing, stretched over the sides that join the next wall brazier. */
+    /**
+     * The wall cage for its facing, stretched over the sides that join the next wall brazier; joined on its
+     * front, the inside-corner cage instead.
+     */
     private static VoxelShape wallShape(BlockState state) {
         Direction facing = state.getValue(FACING);
         int joined = 0;
@@ -690,6 +701,9 @@ public class BrazierBlock extends CampfireBlock {
         }
         if (state.getValue(getConnectionProperty(drawnSide(Direction.EAST, facing)))) {
             joined |= 2;
+        }
+        if (state.getValue(getConnectionProperty(facing))) {
+            joined |= 4;
         }
         return WALL_SHAPES.get(facing)[joined];
     }
@@ -731,6 +745,11 @@ public class BrazierBlock extends CampfireBlock {
     /**
      * Fire pits join braziers placed the same way: floor beside floor, or wall beside wall on the same
      * wall. Hanging braziers never connect (PRD: Placement).
+     *
+     * <p>Wall runs also turn inside corners (owner, 2026-10-25): a wall brazier joins one in front of it on
+     * the other wall, and is then the corner piece. Along its sides it joins the next brazier on the same
+     * wall, or a corner piece whose front points at it. Nothing joins behind a wall brazier, so the runs
+     * around an outside corner stop with a gap.
      */
     protected static boolean canConnect(LevelReader level, BlockPos pos, BlockState state, Direction direction) {
         BlockState neighborState = level.getBlockState(pos.relative(direction));
@@ -741,7 +760,18 @@ public class BrazierBlock extends CampfireBlock {
         if (placement == BrazierPlacement.CEILING || neighborState.getValue(PLACEMENT) != placement) {
             return false;
         }
-        return placement == BrazierPlacement.FLOOR || neighborState.getValue(FACING) == state.getValue(FACING);
+        if (placement == BrazierPlacement.FLOOR) {
+            return true;
+        }
+        Direction facing = state.getValue(FACING);
+        Direction neighborFacing = neighborState.getValue(FACING);
+        if (direction == facing) {
+            return neighborFacing.getAxis() != facing.getAxis();
+        }
+        if (direction == facing.getOpposite()) {
+            return false;
+        }
+        return neighborFacing == facing || neighborFacing == direction.getOpposite();
     }
 
     private BlockState calculateConnections(BlockState state, LevelReader level, BlockPos pos, BrazierPlacement placement) {
