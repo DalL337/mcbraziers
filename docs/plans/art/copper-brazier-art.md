@@ -391,3 +391,16 @@ Approved by the owner on 2026-10-18 from mockups
 > **Addendum (2026-10-25, owner decision):** Strung braziers keep the bracket
 > plate for now ("I am not too worried about it"). Dropping it would need a
 > new block-state property, which would double the brazier block states.
+
+> **Addendum (2026-10-25, inside corners: the room side of the turn; owner
+> decisions after a mockup in game):** On the room side of the turn, the
+> inside corner's arms were open like bridges. That left a 6 px window on
+> each face between the two runs' last slats, with no tips. Now a 1 px corner
+> post stands where the inner walls meet. A thin 1 px slat in the middle of
+> each face leaves even 2.5 px windows, as on the outside corner's bend, and
+> a tip leans out over each new slat. The post has no tips. The owner dropped
+> the mockup's two post tips: tips leaning out of a concave corner can't meet
+> cleanly in block geometry. The parts are in `wall_corner_arm_*`, which
+> crying obsidian now stains too. Checks: build with no warnings, game tests
+> 47 of 47, and the `wall-corners` client scenario run on its own
+> (`art-wall-corner*.png`, including the new `art-wall-corner-copper-turn`).
