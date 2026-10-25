@@ -191,8 +191,11 @@ braziers (shared sides open up). Hanging braziers never connect.
 >   edge, it goes around the corner onto the block's next face, bracketed to
 >   the block, and the corner block stays empty. If that face already has a
 >   brazier, nothing is placed.
+> - Clicking the front of a wall brazier grows the run from the end nearer
+>   the click, as clicking that end does.
 > - Sneak-clicking places by the clicked face, as before: a wall brazier on
->   the side of a floor brazier, or one mounted on the end of a wall brazier.
+>   the side of a floor brazier, or one mounted on the end or the front of a
+>   wall brazier.
 >
 > Wall runs turn **inside corners**: where two walls meet, the brazier in the
 > corner joins the runs on both walls into one L-shaped trough, bracketed to
