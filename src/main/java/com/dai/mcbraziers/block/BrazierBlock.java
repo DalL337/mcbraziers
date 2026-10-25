@@ -51,6 +51,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -374,10 +375,11 @@ public class BrazierBlock extends CampfireBlock {
     }
 
     /**
-     * Where a brazier goes when the click is on the end of a wall run whose wall stops there, as at a
-     * pillar's edge (owner, 2026-10-25): around the corner, on the wall block's next face, bracketed to that
-     * block, so the corner block stays empty. When that face is taken or can't hold a brazier, nothing is
-     * placed. Every other click, and any click while sneaking, places where it lands.
+     * Where a brazier goes when a wall brazier is clicked (owner, 2026-10-25). Clicking its front grows the run
+     * from the end nearer the click, as clicking that end does. Where the run's wall stops, as at a pillar's
+     * edge, the next brazier goes around the corner, on the wall block's next face, bracketed to that block,
+     * so the corner block stays empty. When that face is taken or can't hold a brazier, nothing is placed.
+     * Every other click, and any click while sneaking, places where it lands.
      *
      * @return the click to place from, or null to place nothing
      */
@@ -388,15 +390,34 @@ public class BrazierBlock extends CampfireBlock {
             return ctx;
         }
         Direction run = against.getValue(FACING);
+        if (side == run.getOpposite()) {
+            return ctx;
+        }
+        if (side == run) {
+            BlockPos brazier = ctx.getClickedPos().relative(run.getOpposite());
+            side = nearerEnd(ctx.getClickLocation(), brazier, run);
+            ctx = BlockPlaceContext.at(ctx, brazier, side);
+            if (!ctx.canPlace()) {
+                return null;
+            }
+        }
         Level level = ctx.getLevel();
         // The block beside the wall's end, where the run's wall would have gone on
         BlockPos around = ctx.getClickedPos().relative(run.getOpposite());
-        if (side.getAxis() == run.getAxis() || level.getBlockState(around).isFaceSturdy(level, around, run)) {
+        if (level.getBlockState(around).isFaceSturdy(level, around, run)) {
             return ctx;
         }
         BlockPos wallBlock = around.relative(side.getOpposite());
         BlockPlaceContext wrapped = BlockPlaceContext.at(ctx, around, side);
         return wrapped.replacingClickedOnBlock() && level.getBlockState(wallBlock).isFaceSturdy(level, wallBlock, side) ? wrapped : null;
+    }
+
+    /** The end of a wall brazier facing {@code facing} on the side of its middle where it was clicked. */
+    private static Direction nearerEnd(Vec3 click, BlockPos brazier, Direction facing) {
+        Direction clockwise = facing.getClockWise();
+        Vec3 middle = Vec3.atCenterOf(brazier);
+        double along = (click.x - middle.x) * clockwise.getStepX() + (click.z - middle.z) * clockwise.getStepZ();
+        return along >= 0 ? clockwise : clockwise.getOpposite();
     }
 
     @Override

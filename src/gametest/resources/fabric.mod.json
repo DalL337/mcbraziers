@@ -16,6 +16,7 @@
             "com.dai.mcbraziers.gametest.BrazierPlacementGameTests"
         ],
         "fabric-client-gametest": [
+            "com.dai.mcbraziers.gametest.BrazierPlacementClientGameTest",
             "com.dai.mcbraziers.gametest.FireParticleClientGameTest",
             "com.dai.mcbraziers.gametest.BrazierArtClientGameTest"
         ]
