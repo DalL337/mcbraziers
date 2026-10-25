@@ -47,6 +47,9 @@ public class BrazierPlacementClientGameTest implements FabricClientGameTest {
 
     @Override
     public void runTest(ClientGameTestContext context) {
+        if (!ClientScenarios.runs("placement")) {
+            return;
+        }
         try (TestSingleplayerContext singleplayer = context.worldBuilder().create()) {
             TestServerContext server = singleplayer.getServer();
             server.runCommand("time set noon");

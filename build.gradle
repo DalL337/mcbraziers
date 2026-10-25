@@ -37,6 +37,14 @@ fabricApi {
     }
 }
 
+// ./gradlew runClientGameTest -Pscenario=<name> runs one client test scenario on its own, for focused visual
+// work; without it every scenario runs, as the regression check (src/gametest ClientScenarios)
+tasks.matching { it.name == "runClientGameTest" }.configureEach {
+    if (project.hasProperty("scenario")) {
+        jvmArgs "-Dmcbraziers.scenario=${project.property("scenario")}"
+    }
+}
+
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"

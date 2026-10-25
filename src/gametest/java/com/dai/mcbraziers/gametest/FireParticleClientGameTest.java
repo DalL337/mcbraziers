@@ -90,6 +90,9 @@ public class FireParticleClientGameTest implements FabricClientGameTest {
 
     @Override
     public void runTest(ClientGameTestContext context) {
+        if (!ClientScenarios.runs("fire-particles")) {
+            return;
+        }
         try (TestSingleplayerContext singleplayer = context.worldBuilder().create()) {
             TestServerContext server = singleplayer.getServer();
             server.runCommand("time set midnight");

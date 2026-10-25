@@ -79,6 +79,13 @@ public class BrazierArtClientGameTest implements FabricClientGameTest {
 
     @Override
     public void runTest(ClientGameTestContext context) {
+        if ("wall-corners".equals(ClientScenarios.focused())) {
+            wallCornersAlone(context);
+            return;
+        }
+        if (!ClientScenarios.runs("art")) {
+            return;
+        }
         try (TestSingleplayerContext singleplayer = context.worldBuilder().create()) {
             TestServerContext server = singleplayer.getServer();
             server.runCommand("time set noon");
@@ -170,36 +177,7 @@ public class BrazierArtClientGameTest implements FabricClientGameTest {
             context.waitTicks(30);
             context.takeScreenshot(TestScreenshotOptions.of("art-wall-mount-netherite").withSize(1280, 720));
 
-            // Wall corners: the iron inside corner from the room, close up, from above and at night; the copper
-            // one, bracketed to the other wall; and the gap around the pillar's outside corner
-            server.runCommand("tp @a -55.5 " + (GROUND + 4.2) + " 3.5 -143 13");
-            checkWallCorner(context);
-            singleplayer.getConnection().waitForChunksRender();
-            context.waitTicks(30);
-            context.takeScreenshot(TestScreenshotOptions.of("art-wall-corner").withSize(1280, 720));
-            server.runCommand("tp @a -54.5 " + (GROUND + 2.9) + " 1 -127 16");
-            context.waitTicks(30);
-            context.takeScreenshot(TestScreenshotOptions.of("art-wall-corner-close-up").withSize(1280, 720));
-            server.runCommand("tp @a -52.5 " + (GROUND + 5.6) + " 1.3 180 50");
-            context.waitTicks(30);
-            context.takeScreenshot(TestScreenshotOptions.of("art-wall-corner-above").withSize(1280, 720));
-            server.runCommand("tp @a -44.5 " + (GROUND + 4.2) + " 3.5 143 13");
-            context.waitTicks(30);
-            context.takeScreenshot(TestScreenshotOptions.of("art-wall-corner-copper").withSize(1280, 720));
-            server.runCommand("tp @a -54.5 " + (GROUND + 4) + " 8.5 135 6");
-            context.waitTicks(30);
-            context.takeScreenshot(TestScreenshotOptions.of("art-wall-outside-corner").withSize(1280, 720));
-            // The trough round the pillar from straight above, then its south-east corner at basket height
-            server.runCommand("tp @a -57.5 " + (GROUND + 3.8) + " 6 0 90");
-            context.waitTicks(30);
-            context.takeScreenshot(TestScreenshotOptions.of("art-wall-outside-corner-above").withSize(1280, 720));
-            server.runCommand("tp @a -55.3 " + (GROUND + 1.95) + " 7.7 135 3");
-            context.waitTicks(30);
-            context.takeScreenshot(TestScreenshotOptions.of("art-wall-outside-corner-front").withSize(1280, 720));
-            server.runCommand("time set midnight");
-            server.runCommand("tp @a -55.5 " + (GROUND + 4.2) + " 3.5 -143 13");
-            context.waitTicks(40);
-            context.takeScreenshot(TestScreenshotOptions.of("art-wall-corner-night").withSize(1280, 720));
+            photographWallCorners(context, singleplayer);
 
             // Copper and amethyst fire: a soul campfire, then each mod campfire with its brazier, at night
             server.runCommand("time set midnight");
@@ -247,6 +225,72 @@ public class BrazierArtClientGameTest implements FabricClientGameTest {
             context.waitTicks(20);
             context.takeScreenshot("art-bars-items");
         }
+    }
+
+    /**
+     * The wall-corners scenario on its own ({@link ClientScenarios}): a fresh world with only the corner rooms
+     * and the pillar, and the campfire the inside corner's food is compared with.
+     */
+    private static void wallCornersAlone(ClientGameTestContext context) {
+        try (TestSingleplayerContext singleplayer = context.worldBuilder().create()) {
+            TestServerContext server = singleplayer.getServer();
+            server.runCommand("weather clear");
+            server.runCommand("gamemode spectator @a");
+            server.runOnServer(minecraft -> {
+                ServerLevel level = minecraft.overworld();
+                buildWallCorners(level);
+                place(level, campfirePos(), Blocks.CAMPFIRE.defaultBlockState());
+                addFood(level, campfirePos());
+            });
+            context.runOnClient(minecraft -> {
+                if (!minecraft.gui.hud.isHidden()) {
+                    minecraft.gui.hud.toggle();
+                }
+            });
+            photographWallCorners(context, singleplayer);
+        }
+    }
+
+    /**
+     * Wall corners: the iron inside corner from the room, close up, from above and at night; the copper one,
+     * bracketed to the other wall, and the room side of its turn from above; and the trough round the pillar's
+     * outside corners.
+     */
+    private static void photographWallCorners(ClientGameTestContext context, TestSingleplayerContext singleplayer) {
+        TestServerContext server = singleplayer.getServer();
+        server.runCommand("time set noon");
+        server.runCommand("tp @a -55.5 " + (GROUND + 4.2) + " 3.5 -143 13");
+        checkWallCorner(context);
+        singleplayer.getConnection().waitForChunksRender();
+        context.waitTicks(30);
+        context.takeScreenshot(TestScreenshotOptions.of("art-wall-corner").withSize(1280, 720));
+        server.runCommand("tp @a -54.5 " + (GROUND + 2.9) + " 1 -127 16");
+        context.waitTicks(30);
+        context.takeScreenshot(TestScreenshotOptions.of("art-wall-corner-close-up").withSize(1280, 720));
+        server.runCommand("tp @a -52.5 " + (GROUND + 5.6) + " 1.3 180 50");
+        context.waitTicks(30);
+        context.takeScreenshot(TestScreenshotOptions.of("art-wall-corner-above").withSize(1280, 720));
+        server.runCommand("tp @a -44.5 " + (GROUND + 4.2) + " 3.5 143 13");
+        context.waitTicks(30);
+        context.takeScreenshot(TestScreenshotOptions.of("art-wall-corner-copper").withSize(1280, 720));
+        // The room side of the copper corner's turn, close and from above, as the owner reviewed it
+        server.runCommand("tp @a -46.2 " + (GROUND + 3.54) + " 0.8 135 45");
+        context.waitTicks(30);
+        context.takeScreenshot(TestScreenshotOptions.of("art-wall-corner-copper-turn").withSize(1280, 720));
+        server.runCommand("tp @a -54.5 " + (GROUND + 4) + " 8.5 135 6");
+        context.waitTicks(30);
+        context.takeScreenshot(TestScreenshotOptions.of("art-wall-outside-corner").withSize(1280, 720));
+        // The trough round the pillar from straight above, then its south-east corner at basket height
+        server.runCommand("tp @a -57.5 " + (GROUND + 3.8) + " 6 0 90");
+        context.waitTicks(30);
+        context.takeScreenshot(TestScreenshotOptions.of("art-wall-outside-corner-above").withSize(1280, 720));
+        server.runCommand("tp @a -55.3 " + (GROUND + 1.95) + " 7.7 135 3");
+        context.waitTicks(30);
+        context.takeScreenshot(TestScreenshotOptions.of("art-wall-outside-corner-front").withSize(1280, 720));
+        server.runCommand("time set midnight");
+        server.runCommand("tp @a -55.5 " + (GROUND + 4.2) + " 3.5 -143 13");
+        context.waitTicks(40);
+        context.takeScreenshot(TestScreenshotOptions.of("art-wall-corner-night").withSize(1280, 720));
     }
 
     private static final List<String> HOTBAR = List.of("copper_brazier", "soul_copper_brazier", "copper_fire_copper_brazier",
@@ -795,6 +839,10 @@ public class BrazierArtClientGameTest implements FabricClientGameTest {
                     .setValue(BrazierBlock.PLACEMENT, BrazierPlacement.CEILING));
         }
 
+        buildWallCorners(level);
+    }
+
+    private static void buildWallCorners(ServerLevel level) {
         // Wall corners (owner's rulings, 2026-10-25). Two rooms with walls on the north and one side: iron runs
         // turning the corner with the bracket on the north wall, and copper runs turning it with the bracket on
         // the west wall. A pillar in the iron room has braziers on two faces, with the gap of an outside corner.
