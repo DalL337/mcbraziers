@@ -24,8 +24,8 @@ import net.minecraft.world.phys.Vec3;
 /**
  * Growing fire pits by clicking a brazier (owner's rulings, 2026-10-25; PRD Placement addendum): the side of
  * a floor brazier places a floor brazier beside it, even out over air; the end of a wall brazier continues
- * its run along the wall, or around the corner where the wall stops; sneaking places by the clicked face, as
- * before. Wall runs turn inside corners and leave the corner block empty at outside corners.
+ * its run along the wall, and on past its end over open space; sneaking places by the clicked face, as
+ * before. Wall runs turn inside corners, and outside corners only where both faces have runs.
  */
 public class BrazierPlacementGameTests {
 
@@ -98,47 +98,105 @@ public class BrazierPlacementGameTests {
     }
 
     @GameTest
-    public void atTheWallsEdgeTheRunTurnsTheCornerThroughACornerPiece(GameTestHelper helper) {
-        // A one-block pillar at (1, 2, 3): past the brazier's east end the wall stops at the pillar's corner, so
-        // the click places the corner piece in the corner block, facing the run's way, joined to the run and
-        // turned toward the pillar's east face
+    public void pastTheWallsEdgeTheRunGoesOnStraight(GameTestHelper helper) {
+        // A one-block pillar at (1, 2, 3): past the brazier's east end the wall stops, and with no run on the
+        // pillar's east face the run goes on straight out over open space instead of turning the corner
+        BlockPos first = wallBrazier(helper, 1, 1, 1);
+        BlockPos next = first.east();
+        helper.placeAt(player(helper, false), brazierItem(), first, Direction.EAST);
+        helper.placeAt(player(helper, false), brazierItem(), next, Direction.EAST);
+        for (BlockPos past : new BlockPos[] {next, next.east()}) {
+            assertStraight(helper, past, Direction.NORTH);
+            helper.assertBlockProperty(past, BrazierBlock.WEST_CONNECTED, true);
+            helper.assertBlockPresent(Blocks.AIR, past.south());
+        }
+        helper.assertBlockProperty(next, BrazierBlock.EAST_CONNECTED, true);
+        helper.succeed();
+    }
+
+    @GameTest
+    public void aRunCanBeStrungAcrossAGapToTheNextWall(GameTestHelper helper) {
+        // Pillars at (0, 2, 3) and (4, 2, 3), three blocks apart: clicking each new brazier's east end strings
+        // the run from the first pillar across the gap to the second
+        BlockPos first = wallBrazier(helper, 0, 0, 0);
+        helper.setBlock(new BlockPos(4, 2, 3), Blocks.STONE);
+        for (int x = 0; x < 4; x++) {
+            helper.placeAt(player(helper, false), brazierItem(), first.east(x), Direction.EAST);
+        }
+        for (int x = 1; x <= 4; x++) {
+            assertStraight(helper, first.east(x), Direction.NORTH);
+            helper.assertBlockProperty(first.east(x), BrazierBlock.WEST_CONNECTED, true);
+            helper.assertBlockProperty(first.east(x), BrazierBlock.EAST_CONNECTED, x < 4);
+        }
+        // Breaking one in the middle leaves each half hanging from its pillar
+        helper.setBlock(first.east(2), Blocks.AIR);
+        helper.assertBlockProperty(first.east(1), BrazierBlock.EAST_CONNECTED, false);
+        helper.assertBlockProperty(first.east(1), BrazierBlock.WEST_CONNECTED, true);
+        helper.assertBlockProperty(first.east(3), BrazierBlock.WEST_CONNECTED, false);
+        helper.assertBlockProperty(first.east(3), BrazierBlock.EAST_CONNECTED, true);
+        helper.succeed();
+    }
+
+    @GameTest
+    public void aRunOnTheNextFaceTurnsTheBrazierAtTheEdgeIntoTheCornerPiece(GameTestHelper helper) {
+        // Only where both faces of the pillar have runs does the brazier beside its edge turn the corner: clicking
+        // that brazier's open back puts the next one on the pillar's east face, and the runs join through it
         BlockPos first = wallBrazier(helper, 1, 1, 1);
         BlockPos cornerBlock = first.east();
         BlockPos aroundTheCorner = new BlockPos(2, 2, 3);
         helper.placeAt(player(helper, false), brazierItem(), first, Direction.EAST);
-        assertOutsideCorner(helper, cornerBlock, Direction.NORTH, Direction.WEST);
-        helper.assertBlockPresent(Blocks.AIR, aroundTheCorner);
-        // Clicking the corner piece's open end puts the next brazier on the pillar's east face, joined to it
         helper.placeAt(player(helper, false), brazierItem(), cornerBlock, Direction.SOUTH);
         helper.assertBlockProperty(aroundTheCorner, CampfireBlock.FACING, Direction.EAST);
         helper.assertBlockProperty(aroundTheCorner, BrazierBlock.NORTH_CONNECTED, true);
         assertOutsideCorner(helper, cornerBlock, Direction.NORTH, Direction.WEST);
-        helper.succeed();
-    }
-
-    @GameTest
-    public void theCornerPieceFallsWithTheRunItHangsFrom(GameTestHelper helper) {
-        BlockPos first = wallBrazier(helper, 1, 1, 1);
-        helper.placeAt(player(helper, false), brazierItem(), first, Direction.EAST);
-        helper.setBlock(first, Blocks.AIR);
-        helper.assertBlockPresent(Blocks.AIR, first.east());
-        helper.succeed();
-    }
-
-    @GameTest
-    public void theCornerPieceStaysWhileEitherNeighbourHoldsIt(GameTestHelper helper) {
-        BlockPos first = wallBrazier(helper, 1, 1, 1);
-        BlockPos cornerBlock = first.east();
-        BlockPos aroundTheCorner = new BlockPos(2, 2, 3);
-        helper.placeAt(player(helper, false), brazierItem(), first, Direction.EAST);
-        helper.placeAt(player(helper, false), brazierItem(), cornerBlock, Direction.SOUTH);
-        // Without the run it turned from, the run around the corner holds it
-        helper.setBlock(first, Blocks.AIR);
-        helper.assertBlockProperty(cornerBlock, BrazierBlock.SOUTH_CONNECTED, true);
-        // With neither, it falls
+        // Without the run around the corner, it's straight again, hanging from the run it came from
         helper.setBlock(aroundTheCorner, Blocks.AIR);
+        assertStraight(helper, cornerBlock, Direction.NORTH);
+        helper.assertBlockProperty(cornerBlock, BrazierBlock.WEST_CONNECTED, true);
+        // With neither, it falls
+        helper.setBlock(first, Blocks.AIR);
         helper.assertBlockPresent(Blocks.AIR, cornerBlock);
         helper.succeed();
+    }
+
+    @GameTest
+    public void aRunThatGoesOnPastTheEdgeDoesNotTurnTheCorner(GameTestHelper helper) {
+        // With the run strung on past the pillar's edge, a brazier then put on the pillar's east face stays
+        // apart, rather than making the run a T
+        BlockPos first = wallBrazier(helper, 1, 1, 1);
+        BlockPos pastTheEdge = first.east();
+        BlockPos onEastFace = new BlockPos(2, 2, 3);
+        helper.placeAt(player(helper, false), brazierItem(), first, Direction.EAST);
+        helper.placeAt(player(helper, false), brazierItem(), pastTheEdge, Direction.EAST);
+        helper.placeAt(player(helper, false), brazierItem(), onEastFace.west(), Direction.EAST);
+        helper.assertBlockProperty(onEastFace, CampfireBlock.FACING, Direction.EAST);
+        helper.assertBlockProperty(onEastFace, BrazierBlock.NORTH_CONNECTED, false);
+        assertStraight(helper, pastTheEdge, Direction.NORTH);
+        helper.assertBlockProperty(pastTheEdge, BrazierBlock.WEST_CONNECTED, true);
+        helper.assertBlockProperty(pastTheEdge, BrazierBlock.EAST_CONNECTED, true);
+        helper.succeed();
+    }
+
+    @GameTest
+    public void aBrazierHungOnTheEndOfTheOnlyRunAtAnEdgeStaysApart(GameTestHelper helper) {
+        // A run on the pillar's east face only: sneaking hangs one on its north end, in the block beside the
+        // pillar's edge, but with no run on the pillar's north face it doesn't turn the corner
+        BlockPos pillar = new BlockPos(1, 2, 3);
+        helper.setBlock(pillar, Blocks.STONE);
+        BlockPos onEast = pillar.east();
+        helper.placeAt(player(helper, false), brazierItem(), pillar, Direction.EAST);
+        helper.placeAt(player(helper, true), brazierItem(), onEast, Direction.NORTH);
+        assertStraight(helper, onEast.north(), Direction.NORTH);
+        helper.assertBlockProperty(onEast, BrazierBlock.NORTH_CONNECTED, false);
+        helper.succeed();
+    }
+
+    /** A straight wall brazier at {@code pos} facing {@code facing}: joined neither in front nor behind. */
+    private static void assertStraight(GameTestHelper helper, BlockPos pos, Direction facing) {
+        helper.assertBlockProperty(pos, BrazierBlock.PLACEMENT, BrazierPlacement.WALL);
+        helper.assertBlockProperty(pos, CampfireBlock.FACING, facing);
+        helper.assertBlockProperty(pos, connected(facing), false);
+        helper.assertBlockProperty(pos, connected(facing.getOpposite()), false);
     }
 
     /** The outside corner piece at {@code pos}: facing {@code facing}, joined behind and on {@code run}'s side only. */
@@ -164,12 +222,13 @@ public class BrazierPlacementGameTests {
     }
 
     @GameTest
-    public void clickingTheFrontNearTheWallsEdgePlacesTheCornerPiece(GameTestHelper helper) {
-        // A one-block pillar at (1, 2, 3): the east half of the brazier's front places the corner piece, as
-        // clicking its east end does
+    public void clickingTheFrontNearTheWallsEdgeGoesOnStraight(GameTestHelper helper) {
+        // A one-block pillar at (1, 2, 3): the east half of the brazier's front grows the run on past the
+        // pillar's edge, as clicking its east end does
         BlockPos first = wallBrazier(helper, 1, 1, 1);
         clickFront(helper, first, Direction.NORTH, Direction.EAST);
-        assertOutsideCorner(helper, first.east(), Direction.NORTH, Direction.WEST);
+        assertStraight(helper, first.east(), Direction.NORTH);
+        helper.assertBlockProperty(first.east(), BrazierBlock.WEST_CONNECTED, true);
         helper.assertBlockPresent(Blocks.AIR, first.north());
         helper.succeed();
     }
@@ -255,19 +314,27 @@ public class BrazierPlacementGameTests {
 
     @GameTest
     public void runsOnTwoFacesJoinThroughTheCornerPiece(GameTestHelper helper) {
-        // A one-block pillar with a brazier on its north face and one on its east face: clicking the east run's
-        // north end places the corner piece between them, and the trough runs round the pillar's edge
-        BlockPos pillar = new BlockPos(2, 2, 2);
-        helper.setBlock(pillar, Blocks.STONE);
-        BlockPos onNorth = pillar.north();
-        BlockPos onEast = pillar.east();
-        helper.placeAt(player(helper, false), brazierItem(), pillar, Direction.NORTH);
-        helper.placeAt(player(helper, false), brazierItem(), pillar, Direction.EAST);
-        BlockPos cornerBlock = onEast.north();
-        helper.placeAt(player(helper, false), brazierItem(), onEast, Direction.NORTH);
-        assertOutsideCorner(helper, cornerBlock, Direction.EAST, Direction.SOUTH);
-        helper.assertBlockProperty(onEast, BrazierBlock.NORTH_CONNECTED, true);
-        helper.assertBlockProperty(onNorth, BrazierBlock.EAST_CONNECTED, true);
+        // Two one-block pillars, each with a brazier on its north face and one on its east face: clicking either
+        // run's end at the pillar's edge places the corner piece between them, facing that run's way, and the
+        // trough runs round the pillar's edge
+        for (boolean fromEast : new boolean[] {true, false}) {
+            BlockPos pillar = new BlockPos(fromEast ? 2 : 5, 2, 2);
+            helper.setBlock(pillar, Blocks.STONE);
+            BlockPos onNorth = pillar.north();
+            BlockPos onEast = pillar.east();
+            helper.placeAt(player(helper, false), brazierItem(), pillar, Direction.NORTH);
+            helper.placeAt(player(helper, false), brazierItem(), pillar, Direction.EAST);
+            BlockPos cornerBlock = onEast.north();
+            if (fromEast) {
+                helper.placeAt(player(helper, false), brazierItem(), onEast, Direction.NORTH);
+                assertOutsideCorner(helper, cornerBlock, Direction.EAST, Direction.SOUTH);
+            } else {
+                helper.placeAt(player(helper, false), brazierItem(), onNorth, Direction.EAST);
+                assertOutsideCorner(helper, cornerBlock, Direction.NORTH, Direction.WEST);
+            }
+            helper.assertBlockProperty(onEast, BrazierBlock.NORTH_CONNECTED, true);
+            helper.assertBlockProperty(onNorth, BrazierBlock.EAST_CONNECTED, true);
+        }
         helper.succeed();
     }
 

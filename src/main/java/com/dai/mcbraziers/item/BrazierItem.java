@@ -23,10 +23,10 @@ public class BrazierItem extends BlockItem {
         return this.fire;
     }
 
-    /** At the outside edge of a wall run, the next brazier goes around the corner (or nowhere). */
+    /** A click on a wall brazier's front grows its run from the nearer end (or nowhere, if that spot is taken). */
     @Override
     public @Nullable BlockPlaceContext updatePlacementContext(BlockPlaceContext context) {
-        return BrazierBlock.aroundOutsideCorner(context);
+        return BrazierBlock.alongRun(context);
     }
 
     @Override
