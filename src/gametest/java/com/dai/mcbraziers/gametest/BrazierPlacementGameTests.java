@@ -1,0 +1,125 @@
+package com.dai.mcbraziers.gametest;
+
+import com.dai.mcbraziers.block.BrazierBlock;
+import com.dai.mcbraziers.block.BrazierFire;
+import com.dai.mcbraziers.block.BrazierPlacement;
+import com.dai.mcbraziers.block.BrazierTier;
+import com.dai.mcbraziers.block.BrazierVariant;
+import com.dai.mcbraziers.item.ModItems;
+import net.fabricmc.fabric.api.gametest.v1.GameTest;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+
+/**
+ * Growing fire pits by clicking a brazier (owner's rulings, 2026-10-25; PRD Placement addendum): the side of
+ * a floor brazier places a floor brazier beside it, even out over air; the end of a wall brazier continues
+ * its run along the wall, where the wall goes on; sneaking places by the clicked face, as before.
+ */
+public class BrazierPlacementGameTests {
+
+    private static final BrazierVariant IRON = new BrazierVariant(BrazierTier.IRON, "");
+
+    private static ItemStack brazierItem() {
+        return new ItemStack(ModItems.brazierItem(IRON, BrazierFire.NORMAL));
+    }
+
+    private static Player player(GameTestHelper helper, boolean sneaking) {
+        Player player = helper.makeMockPlayer(GameType.CREATIVE);
+        player.setShiftKeyDown(sneaking);
+        return player;
+    }
+
+    /** A floor brazier standing on stone at (1, 2, 1). */
+    private static BlockPos floorBrazier(GameTestHelper helper) {
+        BlockPos ground = new BlockPos(1, 1, 1);
+        helper.setBlock(ground, Blocks.STONE);
+        helper.placeAt(player(helper, false), brazierItem(), ground, Direction.UP);
+        return ground.above();
+    }
+
+    /** A wall brazier at (x, 2, 2) on the north face of a stone wall along z = 3 from x0 to x1. */
+    private static BlockPos wallBrazier(GameTestHelper helper, int x, int x0, int x1) {
+        for (int wall = x0; wall <= x1; wall++) {
+            helper.setBlock(new BlockPos(wall, 2, 3), Blocks.STONE);
+        }
+        BlockPos pos = new BlockPos(x, 2, 2);
+        helper.placeAt(player(helper, false), brazierItem(), pos.south(), Direction.NORTH);
+        helper.assertBlockProperty(pos, CampfireBlock.FACING, Direction.NORTH);
+        return pos;
+    }
+
+    @GameTest
+    public void theSideOfAFloorBrazierGrowsItsFirePitOutOverAir(GameTestHelper helper) {
+        BlockPos first = floorBrazier(helper);
+        BlockPos next = first.east();
+        helper.placeAt(player(helper, false), brazierItem(), first, Direction.EAST);
+        helper.assertBlockProperty(next, BrazierBlock.PLACEMENT, BrazierPlacement.FLOOR);
+        helper.assertBlockPresent(Blocks.AIR, next.below());
+        helper.assertBlockProperty(first, BrazierBlock.EAST_CONNECTED, true);
+        helper.assertBlockProperty(next, BrazierBlock.WEST_CONNECTED, true);
+        helper.succeed();
+    }
+
+    @GameTest
+    public void sneakingOnTheSideOfAFloorBrazierMountsOneOnIt(GameTestHelper helper) {
+        BlockPos first = floorBrazier(helper);
+        BlockPos mounted = first.east();
+        helper.placeAt(player(helper, true), brazierItem(), first, Direction.EAST);
+        helper.assertBlockProperty(mounted, BrazierBlock.PLACEMENT, BrazierPlacement.WALL);
+        helper.assertBlockProperty(mounted, CampfireBlock.FACING, Direction.EAST);
+        helper.assertBlockProperty(first, BrazierBlock.EAST_CONNECTED, false);
+        helper.succeed();
+    }
+
+    @GameTest
+    public void eitherEndOfAWallBrazierContinuesItsRunAlongTheWall(GameTestHelper helper) {
+        BlockPos first = wallBrazier(helper, 1, 0, 2);
+        for (Direction end : new Direction[] {Direction.EAST, Direction.WEST}) {
+            BlockPos next = first.relative(end);
+            helper.placeAt(player(helper, false), brazierItem(), first, end);
+            helper.assertBlockProperty(next, BrazierBlock.PLACEMENT, BrazierPlacement.WALL);
+            helper.assertBlockProperty(next, CampfireBlock.FACING, Direction.NORTH);
+            helper.assertBlockProperty(first, connected(end), true);
+            helper.assertBlockProperty(next, connected(end.getOpposite()), true);
+        }
+        helper.succeed();
+    }
+
+    @GameTest
+    public void whereTheWallStopsTheEndOfARunMountsOnTheBrazierAsBefore(GameTestHelper helper) {
+        // A one-block pillar: past the brazier's east end there's no wall to continue on
+        BlockPos first = wallBrazier(helper, 1, 1, 1);
+        BlockPos mounted = first.east();
+        helper.placeAt(player(helper, false), brazierItem(), first, Direction.EAST);
+        helper.assertBlockProperty(mounted, BrazierBlock.PLACEMENT, BrazierPlacement.WALL);
+        helper.assertBlockProperty(mounted, CampfireBlock.FACING, Direction.EAST);
+        helper.assertBlockProperty(first, BrazierBlock.EAST_CONNECTED, false);
+        helper.succeed();
+    }
+
+    @GameTest
+    public void sneakingOnTheEndOfAWallBrazierMountsOneOnIt(GameTestHelper helper) {
+        BlockPos first = wallBrazier(helper, 1, 0, 2);
+        BlockPos mounted = first.east();
+        helper.placeAt(player(helper, true), brazierItem(), first, Direction.EAST);
+        helper.assertBlockProperty(mounted, CampfireBlock.FACING, Direction.EAST);
+        helper.assertBlockProperty(first, BrazierBlock.EAST_CONNECTED, false);
+        helper.succeed();
+    }
+
+    private static BooleanProperty connected(Direction side) {
+        return switch (side) {
+            case NORTH -> BrazierBlock.NORTH_CONNECTED;
+            case SOUTH -> BrazierBlock.SOUTH_CONNECTED;
+            case EAST -> BrazierBlock.EAST_CONNECTED;
+            default -> BrazierBlock.WEST_CONNECTED;
+        };
+    }
+}

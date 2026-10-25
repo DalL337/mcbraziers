@@ -307,14 +307,18 @@ public class BrazierBlock extends CampfireBlock {
 
         Direction side = ctx.getClickedFace();
         BrazierPlacement placement;
+        BlockState against = placedAgainst(ctx);
 
         if (side == Direction.UP) {
             placement = BrazierPlacement.FLOOR;
         } else if (side == Direction.DOWN) {
             placement = BrazierPlacement.CEILING;
+        } else if (growsFrom(ctx, against, BrazierPlacement.FLOOR)) {
+            // The side of a floor brazier grows its fire pit, out over air too (owner, 2026-10-25)
+            placement = BrazierPlacement.FLOOR;
         } else {
             placement = BrazierPlacement.WALL;
-            state = state.setValue(FACING, side);
+            state = state.setValue(FACING, wallFacing(ctx, against, side));
         }
 
         state = state.setValue(PLACEMENT, placement);
@@ -338,6 +342,35 @@ public class BrazierBlock extends CampfireBlock {
         state = calculateConnections(state, ctx.getLevel(), ctx.getClickedPos(), placement);
 
         return state;
+    }
+
+    /** The block a brazier is placed against: the one behind the clicked face, as vanilla's wall torch reads it. */
+    private static BlockState placedAgainst(BlockPlaceContext ctx) {
+        return ctx.getLevel().getBlockState(ctx.getClickedPos().relative(ctx.getClickedFace().getOpposite()));
+    }
+
+    /**
+     * Whether this brazier joins the fire pit of the brazier it's placed against, which is placed this way.
+     * Sneaking places it by the clicked face instead, as before (owner, 2026-10-25).
+     */
+    private static boolean growsFrom(BlockPlaceContext ctx, BlockState against, BrazierPlacement placement) {
+        return !ctx.isSecondaryUseActive() && against.getBlock() instanceof BrazierBlock && against.getValue(PLACEMENT) == placement;
+    }
+
+    /**
+     * A wall brazier faces the clicked side, except that clicking either end of a wall brazier continues
+     * its run along the same wall, wherever that wall goes on. Where it stops, as at a pillar's edge, the
+     * brazier faces the clicked side as before.
+     */
+    private static Direction wallFacing(BlockPlaceContext ctx, BlockState against, Direction side) {
+        if (growsFrom(ctx, against, BrazierPlacement.WALL)) {
+            Direction run = against.getValue(FACING);
+            BlockPos wallPos = ctx.getClickedPos().relative(run.getOpposite());
+            if (side.getAxis() != run.getAxis() && ctx.getLevel().getBlockState(wallPos).isFaceSturdy(ctx.getLevel(), wallPos, run)) {
+                return run;
+            }
+        }
+        return side;
     }
 
     @Override

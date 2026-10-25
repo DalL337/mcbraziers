@@ -12,7 +12,8 @@
             "com.dai.mcbraziers.gametest.WaterGameTests",
             "com.dai.mcbraziers.gametest.SpecialsAndMiningGameTests",
             "com.dai.mcbraziers.gametest.CopperAgingGameTests",
-            "com.dai.mcbraziers.gametest.BrazierCageGameTests"
+            "com.dai.mcbraziers.gametest.BrazierCageGameTests",
+            "com.dai.mcbraziers.gametest.BrazierPlacementGameTests"
         ],
         "fabric-client-gametest": [
             "com.dai.mcbraziers.gametest.FireParticleClientGameTest",
