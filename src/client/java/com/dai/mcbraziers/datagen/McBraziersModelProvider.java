@@ -63,7 +63,7 @@ public class McBraziersModelProvider extends FabricModelProvider {
     private static final Set<String> SLATTED_PARTS = Set.of("floor_side_north", "floor_side_east", "floor_side_south",
             "floor_side_west", "wall_core", "wall_side_west", "wall_side_east", "wall_corner_core", "wall_corner_end_west",
             "wall_corner_end_east", "wall_outer_bend_west", "wall_outer_bend_east", "wall_outer_arm_west", "wall_outer_arm_east",
-            "ceiling_cage");
+            "wall_corner_arm_west", "wall_corner_arm_east", "ceiling_cage");
     private static final List<String> CRYING_ARRANGEMENTS = List.of("crying_a", "crying_b", "crying_c");
 
     /** Blockstate turn for a wall brazier drawn facing north. */

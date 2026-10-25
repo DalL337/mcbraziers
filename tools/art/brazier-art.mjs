@@ -576,13 +576,34 @@ function wallCornerParts() {
     wall_corner_bed: { slot: 'embers', elements: [bedCube([5, 5, 5], [11, 5.5, 11])].map(resolveUvs) },
     wall_corner_bed_front: { slot: 'embers', elements: [bedCube([5, 5, 0], [11, 5.5, 5])].map(resolveUvs) },
   };
+  // The room side of the turn (owner's review, 2026-10-25). The arms are open like bridges, which left a 6 px
+  // window on each face between the last slats of the two runs. As on the outside corner's bend: a 1 px post
+  // where the inner walls meet (up to the grate's underside, so their tops don't fight) and a thin slat in the
+  // middle of each face leave even 2.5 px windows, with a tip leaning out over each slat. The post has none:
+  // two tips leaning out of a concave corner can't meet cleanly in block geometry (owner, 2026-10-25). They go
+  // with the side arm, since which face of the arm forward is the room side depends on the side the run
+  // comes in from.
+  const tipOut = (a, turns) => turnElement(tip(a, 13.7, 3.3, 5.3), turns);
+  const arms = {};
+  const innerTurn = (s) => {
+    const west = s === 'west';
+    const [p0, p1] = mirror(s, 4, 5), [a0, a1] = mirror(s, 0.5, 1.5), [f0, f1] = mirror(s, 4, 4.3);
+    return [
+      slatCube([p0, 7, 4], [p1, 12, 5]),
+      slatCube([a0, 7, 4], [a1, 13, 4.3]),
+      slatCube([f0, 7, 0.5], [f1, 13, 1.5]),
+      tip(west ? 0 : 14, 13.7, 3.3, 5.3),
+      tipOut(west ? 14 : 0, west ? 3 : 1),
+    ];
+  };
   for (const s of ['west', 'east']) {
     const [b0, b1] = mirror(s, 0, 5);
-    parts[`wall_corner_arm_${s}`] = { slot: 'body', elements: arm(s).map(resolveUvs) };
+    arms[`wall_corner_arm_${s}`] = { slot: 'body', elements: [...arm(s), ...innerTurn(s)].map(resolveUvs) };
     parts[`wall_corner_end_${s}`] = { slot: 'body', elements: end(s).map(resolveUvs) };
     parts[`wall_corner_bed_arm_${s}`] = { slot: 'embers', elements: [bedCube([b0, 5, 5], [b1, 5.5, 11])].map(resolveUvs) };
   }
-  return { ...parts, ...wallOuterParts(arm) };
+  // The arms got their slats last, so they go last for the crying stains (see the parts list at the bottom)
+  return { ...parts, ...wallOuterParts(arm), ...arms };
 }
 
 /**

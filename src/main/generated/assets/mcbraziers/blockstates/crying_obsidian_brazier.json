@@ -1007,9 +1007,17 @@
       }
     },
     {
-      "apply": {
-        "model": "mcbraziers:block/crying_obsidian_brazier/wall_corner_arm_west"
-      },
+      "apply": [
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_a/wall_corner_arm_west"
+        },
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_b/wall_corner_arm_west"
+        },
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_c/wall_corner_arm_west"
+        }
+      ],
       "when": {
         "facing": "north",
         "north_connected": "true",
@@ -1037,9 +1045,17 @@
       }
     },
     {
-      "apply": {
-        "model": "mcbraziers:block/crying_obsidian_brazier/wall_corner_arm_east"
-      },
+      "apply": [
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_a/wall_corner_arm_east"
+        },
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_b/wall_corner_arm_east"
+        },
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_c/wall_corner_arm_east"
+        }
+      ],
       "when": {
         "east_connected": "true",
         "facing": "north",
@@ -2101,10 +2117,20 @@
       }
     },
     {
-      "apply": {
-        "model": "mcbraziers:block/crying_obsidian_brazier/wall_corner_arm_west",
-        "y": 90
-      },
+      "apply": [
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_a/wall_corner_arm_west",
+          "y": 90
+        },
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_b/wall_corner_arm_west",
+          "y": 90
+        },
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_c/wall_corner_arm_west",
+          "y": 90
+        }
+      ],
       "when": {
         "east_connected": "true",
         "facing": "east",
@@ -2135,10 +2161,20 @@
       }
     },
     {
-      "apply": {
-        "model": "mcbraziers:block/crying_obsidian_brazier/wall_corner_arm_east",
-        "y": 90
-      },
+      "apply": [
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_a/wall_corner_arm_east",
+          "y": 90
+        },
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_b/wall_corner_arm_east",
+          "y": 90
+        },
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_c/wall_corner_arm_east",
+          "y": 90
+        }
+      ],
       "when": {
         "east_connected": "true",
         "facing": "east",
@@ -3239,10 +3275,20 @@
       }
     },
     {
-      "apply": {
-        "model": "mcbraziers:block/crying_obsidian_brazier/wall_corner_arm_west",
-        "y": 180
-      },
+      "apply": [
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_a/wall_corner_arm_west",
+          "y": 180
+        },
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_b/wall_corner_arm_west",
+          "y": 180
+        },
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_c/wall_corner_arm_west",
+          "y": 180
+        }
+      ],
       "when": {
         "east_connected": "true",
         "facing": "south",
@@ -3273,10 +3319,20 @@
       }
     },
     {
-      "apply": {
-        "model": "mcbraziers:block/crying_obsidian_brazier/wall_corner_arm_east",
-        "y": 180
-      },
+      "apply": [
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_a/wall_corner_arm_east",
+          "y": 180
+        },
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_b/wall_corner_arm_east",
+          "y": 180
+        },
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_c/wall_corner_arm_east",
+          "y": 180
+        }
+      ],
       "when": {
         "facing": "south",
         "placement": "wall",
@@ -4343,10 +4399,20 @@
       }
     },
     {
-      "apply": {
-        "model": "mcbraziers:block/crying_obsidian_brazier/wall_corner_arm_west",
-        "y": 270
-      },
+      "apply": [
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_a/wall_corner_arm_west",
+          "y": 270
+        },
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_b/wall_corner_arm_west",
+          "y": 270
+        },
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_c/wall_corner_arm_west",
+          "y": 270
+        }
+      ],
       "when": {
         "facing": "west",
         "placement": "wall",
@@ -4377,10 +4443,20 @@
       }
     },
     {
-      "apply": {
-        "model": "mcbraziers:block/crying_obsidian_brazier/wall_corner_arm_east",
-        "y": 270
-      },
+      "apply": [
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_a/wall_corner_arm_east",
+          "y": 270
+        },
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_b/wall_corner_arm_east",
+          "y": 270
+        },
+        {
+          "model": "mcbraziers:block/crying_obsidian_brazier/crying_c/wall_corner_arm_east",
+          "y": 270
+        }
+      ],
       "when": {
         "facing": "west",
         "north_connected": "true",
