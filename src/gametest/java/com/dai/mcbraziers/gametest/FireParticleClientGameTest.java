@@ -113,6 +113,7 @@ public class FireParticleClientGameTest implements FabricClientGameTest {
 
             server.runCommand("tp @a " + CAMERA_X + " " + (GROUND + 1) + " 8.5 180 0");
             singleplayer.getConnection().waitForChunksRender();
+            waitForScene(context, COLUMNS.values().stream().flatMap(x -> List.of(wallPos(x), hangingPos(x)).stream()).toList());
             checkWallAndHangingFlames(context);
             checkAmethystFlameParticle(context);
             checkWallAndHangingSmoke(context);
@@ -123,6 +124,7 @@ public class FireParticleClientGameTest implements FabricClientGameTest {
 
             server.runCommand("tp @a " + (FLOOR_SCENE_X + CAMERA_X) + " " + (GROUND + 1) + " 6.5 180 10");
             singleplayer.getConnection().waitForChunksRender();
+            waitForScene(context, COLUMNS.values().stream().flatMap(x -> List.of(floorPos(x), floorPos(x).east()).stream()).toList());
             checkLavaPops(context);
             for (int shot = 1; shot <= 4; shot++) {
                 context.waitTicks(40);
@@ -135,6 +137,7 @@ public class FireParticleClientGameTest implements FabricClientGameTest {
 
             server.runCommand("tp @a " + (TEAR_X + 4.5) + " " + (GROUND + 1) + " 6.5 180 0");
             singleplayer.getConnection().waitForChunksRender();
+            waitForScene(context, List.of(tearPos(0), tearPos(3), tearPos(6), tearPos(9), hangingTearPos()));
             checkTears(context);
             for (int shot = 1; shot <= 2; shot++) {
                 context.waitTicks(40);
@@ -276,6 +279,15 @@ public class FireParticleClientGameTest implements FabricClientGameTest {
                 "Amethyst Campfire popped lava");
         check(animate(context, floorPos(COLUMNS.get(BrazierFire.NORMAL)).east()).contains(ParticleTypes.LAVA),
                 "vanilla campfire popped no lava; the check itself is broken");
+    }
+
+    /**
+     * Waits until the client has the scene's blocks. Right after a teleport it can still read them as air, and
+     * an animate tick on air spawns nothing: a full run failed that way once, with "spawned flames []"
+     * (2026-10-25). A block that is really missing times the wait out instead.
+     */
+    private static void waitForScene(ClientGameTestContext context, List<BlockPos> blocks) {
+        context.waitFor(minecraft -> minecraft.level != null && blocks.stream().noneMatch(pos -> minecraft.level.getBlockState(pos).isAir()));
     }
 
     /** Runs the block's own animate tick {@link #ANIMATE_TICKS} times and returns the particle types it spawned. */
