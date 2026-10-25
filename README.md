@@ -22,7 +22,7 @@ On a server, install the mod and Fabric API on the server and on every player's 
 
 1. Install Fabric Loader for Minecraft 26.3 with the [Fabric installer](https://fabricmc.net/use/installer/).
 2. Download Fabric API for 26.3 from [Modrinth](https://modrinth.com/mod/fabric-api) or CurseForge.
-3. Download `mcbraziers-1.0.0.jar` from this repository's
+3. Download `mcbraziers-1.1.0.jar` from this repository's
    [Releases](https://github.com/DalL337/mcbraziers/releases) page.
 4. Put both jars in your `mods` folder (on Windows, `%appdata%\.minecraft\mods`).
 5. Start Minecraft with the Fabric profile. The braziers are in their own creative tab.
@@ -83,7 +83,7 @@ cd mcbraziers
 ./gradlew build        # on Windows: gradlew build
 ```
 
-The mod is `build/libs/mcbraziers-1.0.0.jar` (the `-sources` jar is the source code). The build also
+The mod is `build/libs/mcbraziers-1.1.0.jar` (the `-sources` jar is the source code). The build also
 runs the unit tests and the headless game tests. `./gradlew runClient` starts a development game with
 the mod loaded.
 
