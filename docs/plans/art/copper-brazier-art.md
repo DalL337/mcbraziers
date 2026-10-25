@@ -297,3 +297,49 @@ Approved by the owner on 2026-10-18 from mockups
 > - Build with no warnings; game tests 30 of 30.
 >
 > With this, every mod block and item has its final art.
+
+> **Addendum (2026-10-25, inside corners; owner decision, PRD Placement
+> addendum):** A wall brazier joined on its front is an inside corner: it turns
+> its run through a right angle into the run on the other wall. The owner
+> asked for a vanilla+ look, a bracket on one wall, and a plain gap at outside
+> corners, which get no piece.
+>
+> Drawn facing north (front at z 0, wall at z 16), in pixels:
+> - The basket narrows to an 8 px junction, x 4–12 by z 4–12, as wide as the
+>   run coming in from the front. It has a floor, a back wall with the two
+>   middle slats of a straight basket, a back rim and a grate. The same
+>   bracket holds it to this brazier's own wall.
+> - An arm reaches forward to the block edge (x 4–12, z 0–4). It is open like
+>   the bridges between braziers, and its low walls run on to the junction's
+>   corners, so the inside of the turn has no gap.
+> - Each side has an arm to the block edge (x 0–4 or 12–16) when the next
+>   brazier along this wall joins. Otherwise it closes with an end wall at x 4
+>   or x 12, with three slats and no tips.
+> - Ember bed pieces sit under each part. The wall fire is the straight wall
+>   brazier's, whose crossed flames fit inside the junction.
+> - Rims sit 0.5 px outside the walls. The hitbox runs from 3.5 to 12.5 px
+>   across a corner with closed ends, and to the block edge on the front and on
+>   a joined side. The bracket takes it from 0.5 to 14 px up and back to the
+>   wall. Food and the fire particles stay in the middle of the block, on the
+>   junction.
+>
+> A corner needs no new block state: it is a wall brazier whose front
+> connection is set. The parts are `wall_corner_*` in
+> `tools/art/brazier-art.mjs`. The slatted ones get the three crying
+> arrangements, numbered after the existing parts so stains already in the
+> world stay put.
+>
+> Checks:
+> - Build with no warnings; game tests 39 of 39. `BrazierPlacementGameTests`
+>   covers the joins, and the cage test covers the corner hitboxes and food,
+>   with the values above.
+> - The art client test checks every corner state for missing art. Its edge
+>   check now looks at the cage and the ember bed separately: before, a
+>   bridge's ember bed reaching the edge could hide a missing cage arm.
+> - Mutation checks, each caught: no corner at the front, joining behind, no
+>   corner arm on the side, a front joining any wall brazier, the corner
+>   hitbox ignored, and, in the client test, the corner's front arm and its
+>   front ember bed each left out.
+> - Screenshots in `temp/art/screenshots/`: `art-wall-corner*.png` (iron, by
+>   day, close up, from above, at night; copper bracketed to the other wall)
+>   and `art-wall-outside-corner.png` (the gap around a pillar).

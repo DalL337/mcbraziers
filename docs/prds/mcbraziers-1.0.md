@@ -182,6 +182,23 @@ there). It is the ingredient for green-fire braziers.
 Floor and wall braziers link into **connected fire pits** with neighbouring
 braziers (shared sides open up). Hanging braziers never connect.
 
+> **Addendum (2026-10-25, owner decision: growing fire pits and wall
+> corners):** Clicking a brazier grows its fire pit.
+> - Clicking the side of a floor brazier places a floor brazier beside it,
+>   joined to its pit, even out over air.
+> - Clicking either end of a wall brazier places the next one along the same
+>   wall, wherever that wall goes on. Where the wall stops, as at a pillar's
+>   edge, the brazier mounts on the end of the run, as before.
+> - Sneak-clicking places by the clicked face, as before: a wall brazier on
+>   the side of a floor brazier, or one mounted on the end of a wall brazier.
+>
+> Wall runs turn **inside corners**: where two walls meet, the brazier in the
+> corner joins the runs on both walls into one L-shaped trough, bracketed to
+> one wall, the wall of the run it was placed from. **Outside corners** leave
+> a gap: the runs on two faces of a pillar stop at its edge. A brazier
+> standing out in front of another wall brazier doesn't join it. The corner
+> art is in `docs/plans/art/copper-brazier-art.md` (Inside corners addendum).
+
 ### Cooking
 
 - Any **closed-top** brazier cooks: a floor brazier with its grate closed, plus
