@@ -379,3 +379,11 @@ Approved by the owner on 2026-10-18 from mockups
 > not held by its run, a brazier hung on a run's end against a continuing
 > wall counted as a corner, the open end's click facing the clicked side, no
 > corner turned at the edge, and the corner hitbox ignored.
+
+> **Erratum (2026-10-25, owner's in-game test):** The outside corner piece
+> forms only where both of the block's faces have runs. Otherwise the run goes
+> on straight past the edge (PRD Placement erratum), so "no turn before the
+> next run is placed" above is now the intended behavior, not a mutation. A
+> brazier strung out over open space draws the straight wall model, bracket
+> plate included, with no wall behind it (`art-wall-string-behind.png`).
+> Whether those braziers drop the bracket is the owner's call.

@@ -209,6 +209,20 @@ braziers (shared sides open up). Hanging braziers never connect.
 > `docs/plans/art/copper-brazier-art.md` (Inside corners and Outside corners
 > addenda).
 
+> **Erratum (2026-10-25, owner's in-game test: outside corners turned too
+> eagerly):** "It should only wrap around a corner if there are perpendicular
+> faces that both have wall braziers." Past the end of its wall, a run goes on
+> straight: clicking the end of a wall brazier (or that half of its front)
+> where the wall stops places the next brazier beside it, facing the same way,
+> out over open space. A run can be strung this way across a gap to another
+> wall. A brazier with no wall behind it hangs from its run, and falls when it
+> joins no brazier beside it. The brazier beside a block's edge turns the
+> corner only when the block's next face has a run too, and its own run
+> doesn't go on past it. Clicking its open back still puts the next brazier on
+> that face, which turns the corner. This replaces "it places the outside
+> corner piece … turned toward the block's next face" and "where the wall
+> stops with no corner to turn, nothing is placed" above.
+
 ### Cooking
 
 - Any **closed-top** brazier cooks: a floor brazier with its grate closed, plus
