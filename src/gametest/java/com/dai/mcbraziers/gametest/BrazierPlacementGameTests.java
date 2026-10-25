@@ -98,17 +98,57 @@ public class BrazierPlacementGameTests {
     }
 
     @GameTest
-    public void whereTheWallStopsTheNextBrazierGoesAroundTheCorner(GameTestHelper helper) {
-        // A one-block pillar at (1, 2, 3): past the brazier's east end there's no wall to continue on, so the
-        // next brazier goes onto the pillar's east face, bracketed to the pillar, and the corner block stays empty
+    public void atTheWallsEdgeTheRunTurnsTheCornerThroughACornerPiece(GameTestHelper helper) {
+        // A one-block pillar at (1, 2, 3): past the brazier's east end the wall stops at the pillar's corner, so
+        // the click places the corner piece in the corner block, facing the run's way, joined to the run and
+        // turned toward the pillar's east face
         BlockPos first = wallBrazier(helper, 1, 1, 1);
         BlockPos cornerBlock = first.east();
         BlockPos aroundTheCorner = new BlockPos(2, 2, 3);
         helper.placeAt(player(helper, false), brazierItem(), first, Direction.EAST);
-        helper.assertBlockPresent(Blocks.AIR, cornerBlock);
-        helper.assertBlockProperty(aroundTheCorner, BrazierBlock.PLACEMENT, BrazierPlacement.WALL);
+        assertOutsideCorner(helper, cornerBlock, Direction.NORTH, Direction.WEST);
+        helper.assertBlockPresent(Blocks.AIR, aroundTheCorner);
+        // Clicking the corner piece's open end puts the next brazier on the pillar's east face, joined to it
+        helper.placeAt(player(helper, false), brazierItem(), cornerBlock, Direction.SOUTH);
         helper.assertBlockProperty(aroundTheCorner, CampfireBlock.FACING, Direction.EAST);
+        helper.assertBlockProperty(aroundTheCorner, BrazierBlock.NORTH_CONNECTED, true);
+        assertOutsideCorner(helper, cornerBlock, Direction.NORTH, Direction.WEST);
         helper.succeed();
+    }
+
+    @GameTest
+    public void theCornerPieceFallsWithTheRunItHangsFrom(GameTestHelper helper) {
+        BlockPos first = wallBrazier(helper, 1, 1, 1);
+        helper.placeAt(player(helper, false), brazierItem(), first, Direction.EAST);
+        helper.setBlock(first, Blocks.AIR);
+        helper.assertBlockPresent(Blocks.AIR, first.east());
+        helper.succeed();
+    }
+
+    @GameTest
+    public void theCornerPieceStaysWhileEitherNeighbourHoldsIt(GameTestHelper helper) {
+        BlockPos first = wallBrazier(helper, 1, 1, 1);
+        BlockPos cornerBlock = first.east();
+        BlockPos aroundTheCorner = new BlockPos(2, 2, 3);
+        helper.placeAt(player(helper, false), brazierItem(), first, Direction.EAST);
+        helper.placeAt(player(helper, false), brazierItem(), cornerBlock, Direction.SOUTH);
+        // Without the run it turned from, the run around the corner holds it
+        helper.setBlock(first, Blocks.AIR);
+        helper.assertBlockProperty(cornerBlock, BrazierBlock.SOUTH_CONNECTED, true);
+        // With neither, it falls
+        helper.setBlock(aroundTheCorner, Blocks.AIR);
+        helper.assertBlockPresent(Blocks.AIR, cornerBlock);
+        helper.succeed();
+    }
+
+    /** The outside corner piece at {@code pos}: facing {@code facing}, joined behind and on {@code run}'s side only. */
+    private static void assertOutsideCorner(GameTestHelper helper, BlockPos pos, Direction facing, Direction run) {
+        helper.assertBlockProperty(pos, BrazierBlock.PLACEMENT, BrazierPlacement.WALL);
+        helper.assertBlockProperty(pos, CampfireBlock.FACING, facing);
+        helper.assertBlockProperty(pos, connected(facing.getOpposite()), true);
+        helper.assertBlockProperty(pos, connected(run), true);
+        helper.assertBlockProperty(pos, connected(facing), false);
+        helper.assertBlockProperty(pos, connected(run.getOpposite()), false);
     }
 
     @GameTest
@@ -124,13 +164,12 @@ public class BrazierPlacementGameTests {
     }
 
     @GameTest
-    public void clickingTheFrontNearTheWallsEdgeGoesAroundTheCorner(GameTestHelper helper) {
-        // A one-block pillar at (1, 2, 3): the east half of the brazier's front sends the next one around the
-        // pillar's corner, as clicking its east end does
+    public void clickingTheFrontNearTheWallsEdgePlacesTheCornerPiece(GameTestHelper helper) {
+        // A one-block pillar at (1, 2, 3): the east half of the brazier's front places the corner piece, as
+        // clicking its east end does
         BlockPos first = wallBrazier(helper, 1, 1, 1);
         clickFront(helper, first, Direction.NORTH, Direction.EAST);
-        helper.assertBlockProperty(new BlockPos(2, 2, 3), CampfireBlock.FACING, Direction.EAST);
-        helper.assertBlockPresent(Blocks.AIR, first.east());
+        assertOutsideCorner(helper, first.east(), Direction.NORTH, Direction.WEST);
         helper.assertBlockPresent(Blocks.AIR, first.north());
         helper.succeed();
     }
@@ -215,23 +254,33 @@ public class BrazierPlacementGameTests {
     }
 
     @GameTest
-    public void runsAroundAnOutsideCornerStopWithAGap(GameTestHelper helper) {
-        // A one-block pillar with a brazier on its north face and one on its east face
+    public void runsOnTwoFacesJoinThroughTheCornerPiece(GameTestHelper helper) {
+        // A one-block pillar with a brazier on its north face and one on its east face: clicking the east run's
+        // north end places the corner piece between them, and the trough runs round the pillar's edge
         BlockPos pillar = new BlockPos(2, 2, 2);
         helper.setBlock(pillar, Blocks.STONE);
+        BlockPos onNorth = pillar.north();
         BlockPos onEast = pillar.east();
         helper.placeAt(player(helper, false), brazierItem(), pillar, Direction.NORTH);
         helper.placeAt(player(helper, false), brazierItem(), pillar, Direction.EAST);
-        // Clicking the east run's north end: the pillar's north face already has its brazier, so nothing is
-        // placed and the corner block stays empty
         BlockPos cornerBlock = onEast.north();
         helper.placeAt(player(helper, false), brazierItem(), onEast, Direction.NORTH);
-        helper.assertBlockPresent(Blocks.AIR, cornerBlock);
-        // Sneaking mounts one on that end, as before; nothing joins behind a wall brazier, so it stays apart
-        helper.placeAt(player(helper, true), brazierItem(), onEast, Direction.NORTH);
-        helper.assertBlockProperty(cornerBlock, CampfireBlock.FACING, Direction.NORTH);
-        helper.assertBlockProperty(onEast, BrazierBlock.NORTH_CONNECTED, false);
-        helper.assertBlockProperty(cornerBlock, BrazierBlock.SOUTH_CONNECTED, false);
+        assertOutsideCorner(helper, cornerBlock, Direction.EAST, Direction.SOUTH);
+        helper.assertBlockProperty(onEast, BrazierBlock.NORTH_CONNECTED, true);
+        helper.assertBlockProperty(onNorth, BrazierBlock.EAST_CONNECTED, true);
+        helper.succeed();
+    }
+
+    @GameTest
+    public void aBrazierHungOnTheEndOfARunAlongAWallStaysApart(GameTestHelper helper) {
+        // Sneaking hangs one on the end of a run, as before; where the wall goes on behind it, it isn't a
+        // corner, so it doesn't join the run
+        BlockPos first = wallBrazier(helper, 1, 0, 2);
+        BlockPos hung = first.east();
+        helper.placeAt(player(helper, true), brazierItem(), first, Direction.EAST);
+        helper.assertBlockProperty(hung, CampfireBlock.FACING, Direction.EAST);
+        helper.assertBlockProperty(hung, BrazierBlock.WEST_CONNECTED, false);
+        helper.assertBlockProperty(first, BrazierBlock.EAST_CONNECTED, false);
         helper.succeed();
     }
 

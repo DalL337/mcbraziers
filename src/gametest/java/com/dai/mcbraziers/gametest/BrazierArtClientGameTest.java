@@ -189,6 +189,13 @@ public class BrazierArtClientGameTest implements FabricClientGameTest {
             server.runCommand("tp @a -54.5 " + (GROUND + 4) + " 8.5 135 6");
             context.waitTicks(30);
             context.takeScreenshot(TestScreenshotOptions.of("art-wall-outside-corner").withSize(1280, 720));
+            // The trough round the pillar from straight above, then its south-east corner at basket height
+            server.runCommand("tp @a -57.5 " + (GROUND + 3.8) + " 6 0 90");
+            context.waitTicks(30);
+            context.takeScreenshot(TestScreenshotOptions.of("art-wall-outside-corner-above").withSize(1280, 720));
+            server.runCommand("tp @a -55.3 " + (GROUND + 1.95) + " 7.7 135 3");
+            context.waitTicks(30);
+            context.takeScreenshot(TestScreenshotOptions.of("art-wall-outside-corner-front").withSize(1280, 720));
             server.runCommand("time set midnight");
             server.runCommand("tp @a -55.5 " + (GROUND + 4.2) + " 3.5 -143 13");
             context.waitTicks(40);
@@ -318,10 +325,13 @@ public class BrazierArtClientGameTest implements FabricClientGameTest {
         Set<Direction> joinable = switch (state.getValue(BrazierBlock.PLACEMENT)) {
             case FLOOR -> EnumSet.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
             case WALL -> {
-                // Joined on its front, a wall brazier turns an inside corner into the run in front of it
+                // Joined on its front, a wall brazier turns an inside corner into the run in front of it; joined
+                // on its back, an outside corner, with no bracket plate reaching the back edge
                 Direction facing = state.getValue(CampfireBlock.FACING);
-                cage.remove(facing.getOpposite());
-                yield EnumSet.of(facing.getClockWise(), facing.getCounterClockWise(), facing);
+                if (state.getValue(CONNECTED.get(facing)) || !state.getValue(CONNECTED.get(facing.getOpposite()))) {
+                    cage.remove(facing.getOpposite());
+                }
+                yield EnumSet.of(facing.getClockWise(), facing.getCounterClockWise(), facing, facing.getOpposite());
             }
             case CEILING -> EnumSet.noneOf(Direction.class);
         };
@@ -330,6 +340,10 @@ public class BrazierArtClientGameTest implements FabricClientGameTest {
             if (state.getValue(CONNECTED.get(side))) {
                 joined.add(side);
             }
+        }
+        // Joined on both front and back, a wall brazier draws as the inside corner, which has no back arm
+        if (state.getValue(BrazierBlock.PLACEMENT) == BrazierPlacement.WALL && joined.contains(state.getValue(CampfireBlock.FACING))) {
+            joined.remove(state.getValue(CampfireBlock.FACING).getOpposite());
         }
         if (!cage.equals(joined)) {
             return "has its cage reach the block edge on " + cage + " but joins on " + joined;
@@ -589,10 +603,10 @@ public class BrazierArtClientGameTest implements FabricClientGameTest {
     /**
      * The corner scene came out as built: the iron corner piece joins the run along the north wall and the one
      * coming along the east wall, with its food drawn on the junction's grate as on a straight wall brazier,
-     * and the braziers around the pillar stay apart.
+     * and the outside corner pieces join the braziers on the pillar's faces into one trough round its edges.
      */
     private static void checkWallCorner(ClientGameTestContext context) {
-        List<BlockPos> aroundPillar = List.of(new BlockPos(-58, GROUND + 3, 6), new BlockPos(-57, GROUND + 3, 5), new BlockPos(-59, GROUND + 3, 5));
+        BlockPos onSouth = new BlockPos(-58, GROUND + 3, 6);
         // The client may still be loading the scene after the teleport
         context.waitFor(minecraft -> minecraft.level != null && minecraft.level.getBlockState(ironCornerPos()).getBlock() instanceof BrazierBlock);
         String problem = context.computeOnClient(minecraft -> {
@@ -601,10 +615,16 @@ public class BrazierArtClientGameTest implements FabricClientGameTest {
                     || corner.getValue(BrazierBlock.EAST_CONNECTED)) {
                 return "the iron corner piece is " + corner;
             }
-            for (BlockPos pos : aroundPillar) {
-                BlockState state = minecraft.level.getBlockState(pos);
-                if (CONNECTED.values().stream().anyMatch(state::getValue)) {
-                    return "a brazier around the pillar joins a neighbour: " + state;
+            BlockState south = minecraft.level.getBlockState(onSouth);
+            if (!south.getValue(BrazierBlock.EAST_CONNECTED) || !south.getValue(BrazierBlock.WEST_CONNECTED)) {
+                return "the brazier on the pillar's south face is " + south;
+            }
+            for (BlockPos outside : PILLAR_CORNERS) {
+                BlockState state = minecraft.level.getBlockState(outside);
+                Direction toPillarRun = outside.getX() > onSouth.getX() ? Direction.WEST : Direction.EAST;
+                if (!state.getValue(BrazierBlock.NORTH_CONNECTED) || !state.getValue(CONNECTED.get(toPillarRun))
+                        || !minecraft.level.getBlockState(outside.north()).getValue(BrazierBlock.SOUTH_CONNECTED)) {
+                    return "the outside corner piece at " + outside + " is " + state;
                 }
             }
             return null;
@@ -797,9 +817,16 @@ public class BrazierArtClientGameTest implements FabricClientGameTest {
         corners.add(placeWall(level, new BlockPos(-58, GROUND + 3, 6), iron, Direction.SOUTH));
         corners.add(placeWall(level, new BlockPos(-57, GROUND + 3, 5), iron, Direction.EAST));
         corners.add(placeWall(level, new BlockPos(-59, GROUND + 3, 5), iron, Direction.WEST));
+        // Outside corner pieces beside the pillar's two southern edges wrap the trough round three faces
+        for (BlockPos outside : PILLAR_CORNERS) {
+            corners.add(placeWall(level, outside, iron, Direction.SOUTH));
+        }
         corners.forEach((pos) -> connect(level, pos));
         addFood(level, ironCornerPos());
     }
+
+    /** The outside corner pieces beside the pillar's south-east and south-west edges, in its south face's run. */
+    private static final List<BlockPos> PILLAR_CORNERS = List.of(new BlockPos(-57, GROUND + 3, 6), new BlockPos(-59, GROUND + 3, 6));
 
     /** The iron inside corner: walls to its north and east, runs coming in from the west and the south. */
     private static BlockPos ironCornerPos() {

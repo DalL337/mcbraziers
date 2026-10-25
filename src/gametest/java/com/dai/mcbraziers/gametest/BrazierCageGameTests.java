@@ -121,6 +121,13 @@ public class BrazierCageGameTests {
                 .setValue(BrazierBlock.SOUTH_CONNECTED, true));
         assertBounds(helper, cornerEastFacing, new AABB(0, 0.5, 3.5, 16, 14, 16), "an inside corner facing east, joined front and south");
 
+        // Outside corner (art plan, Outside corners addendum): the same 8 px junction with no bracket, reaching
+        // behind it to the block edge and to the edge on its joined side; the rim of its closed side at 12.5 px
+        BlockPos outside = new BlockPos(7, 1, 4);
+        helper.setBlock(outside, wallBrazier(Direction.NORTH).setValue(BrazierBlock.SOUTH_CONNECTED, true)
+                .setValue(BrazierBlock.WEST_CONNECTED, true));
+        assertBounds(helper, outside, new AABB(0, 4, 3.5, 12.5, 13, 16), "an outside corner facing north, joined behind and west");
+
         // Hanging: a 10 px basket with its rim
         BlockPos hanging = new BlockPos(11, 1, 1);
         helper.setBlock(hanging, floorBrazier().setValue(BrazierBlock.PLACEMENT, BrazierPlacement.CEILING));

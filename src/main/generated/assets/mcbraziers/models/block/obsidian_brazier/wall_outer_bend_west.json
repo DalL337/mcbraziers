@@ -1,0 +1,6 @@
+{
+  "parent": "mcbraziers:block/brazier/wall_outer_bend_west",
+  "textures": {
+    "body": "mcbraziers:block/obsidian_brazier"
+  }
+}

@@ -89,7 +89,8 @@ public class BrazierBlock extends CampfireBlock {
     /**
      * Wall cage by facing, then by which sides join the next wall brazier (west 1, east 2, front 4, as drawn
      * facing north): the basket and rim, and the bracket (plate, arm and brace), stretched to the block edge
-     * on a joined side. Joined on the front, it's the inside-corner cage.
+     * on a joined side. Joined on the front, it's the inside-corner cage; 8 is the outside-corner cage, which
+     * has no bracket.
      */
     private static final Map<Direction, VoxelShape[]> WALL_SHAPES = wallShapes();
 
@@ -359,16 +360,27 @@ public class BrazierBlock extends CampfireBlock {
     }
 
     /**
-     * A wall brazier faces the clicked side, except that clicking either end of a wall brazier continues
-     * its run along the same wall, wherever that wall goes on. Where it stops, {@link #aroundOutsideCorner}
-     * has already moved the click around the corner.
+     * A wall brazier faces the clicked side, except when it grows a run. Clicking either end of a wall brazier
+     * continues its run along the same wall, wherever that wall goes on, and where the wall block's outside
+     * corner is, places the corner piece, facing the same way. Clicking the open back of a corner piece puts
+     * the next brazier on the wall block's face around the corner.
      */
     private static Direction wallFacing(BlockPlaceContext ctx, BlockState against, Direction side) {
         if (growsFrom(ctx, against, BrazierPlacement.WALL)) {
+            Level level = ctx.getLevel();
             Direction run = against.getValue(FACING);
             BlockPos wallPos = ctx.getClickedPos().relative(run.getOpposite());
-            if (side.getAxis() != run.getAxis() && ctx.getLevel().getBlockState(wallPos).isFaceSturdy(ctx.getLevel(), wallPos, run)) {
+            if (side.getAxis() != run.getAxis()
+                    && (level.getBlockState(wallPos).isFaceSturdy(level, wallPos, run) || turnsCorner(level, wallPos, side))) {
                 return run;
+            }
+            if (side == run.getOpposite()) {
+                for (Direction around : new Direction[] {run.getClockWise(), run.getCounterClockWise()}) {
+                    BlockPos wallBlock = ctx.getClickedPos().relative(around.getOpposite());
+                    if (level.getBlockState(wallBlock).isFaceSturdy(level, wallBlock, around)) {
+                        return around;
+                    }
+                }
             }
         }
         return side;
@@ -376,10 +388,10 @@ public class BrazierBlock extends CampfireBlock {
 
     /**
      * Where a brazier goes when a wall brazier is clicked (owner, 2026-10-25). Clicking its front grows the run
-     * from the end nearer the click, as clicking that end does. Where the run's wall stops, as at a pillar's
-     * edge, the next brazier goes around the corner, on the wall block's next face, bracketed to that block,
-     * so the corner block stays empty. When that face is taken or can't hold a brazier, nothing is placed.
-     * Every other click, and any click while sneaking, places where it lands.
+     * from the end nearer the click, as clicking that end does. Where the run's wall stops at a wall block's
+     * outside corner, as at a pillar's edge, the click places the outside corner piece there (see
+     * {@link #wallFacing}); where the wall stops with no corner to turn, nothing is placed. Every other click,
+     * and any click while sneaking, places where it lands.
      *
      * @return the click to place from, or null to place nothing
      */
@@ -404,12 +416,19 @@ public class BrazierBlock extends CampfireBlock {
         Level level = ctx.getLevel();
         // The block beside the wall's end, where the run's wall would have gone on
         BlockPos around = ctx.getClickedPos().relative(run.getOpposite());
-        if (level.getBlockState(around).isFaceSturdy(level, around, run)) {
-            return ctx;
-        }
+        return level.getBlockState(around).isFaceSturdy(level, around, run) || turnsCorner(level, around, side) ? ctx : null;
+    }
+
+    /**
+     * Whether a run reaching {@code around}'s side, beside the end of its wall, can turn the wall block's outside
+     * corner there: that block has a sturdy face toward {@code around}, where the next run goes, and
+     * {@code around} is open or already holds a brazier.
+     */
+    private static boolean turnsCorner(LevelReader level, BlockPos around, Direction side) {
         BlockPos wallBlock = around.relative(side.getOpposite());
-        BlockPlaceContext wrapped = BlockPlaceContext.at(ctx, around, side);
-        return wrapped.replacingClickedOnBlock() && level.getBlockState(wallBlock).isFaceSturdy(level, wallBlock, side) ? wrapped : null;
+        BlockState aroundState = level.getBlockState(around);
+        return (aroundState.canBeReplaced() || aroundState.getBlock() instanceof BrazierBlock)
+                && level.getBlockState(wallBlock).isFaceSturdy(level, wallBlock, side);
     }
 
     /** The end of a wall brazier facing {@code facing} on the side of its middle where it was clicked. */
@@ -432,7 +451,8 @@ public class BrazierBlock extends CampfireBlock {
                 BlockPos wallPos = pos.relative(wallDir);
                 BlockState supportState = level.getBlockState(wallPos);
                 return supportState.isFaceSturdy(level, wallPos, state.getValue(FACING))
-                        || supportState.getBlock() instanceof BrazierBlock;
+                        || supportState.getBlock() instanceof BrazierBlock
+                        || heldByRun(level, pos, state);
             }
             case CEILING: {
                 BlockPos abovePos = pos.above();
@@ -464,17 +484,14 @@ public class BrazierBlock extends CampfireBlock {
             LevelReader level, BlockPos pos) {
         BrazierPlacement placement = state.getValue(PLACEMENT);
 
-        // Check wall support (solid block or another brazier)
+        // Wall braziers rejoin on every side, since an outside corner's back depends on its sides too, then check
+        // they're still held: by their wall, a brazier behind them, or, for an outside corner, the run beside it
         if (placement == BrazierPlacement.WALL) {
-            Direction wallDir = state.getValue(FACING).getOpposite();
-            if (direction == wallDir) {
-                BlockPos wallPos = pos.relative(wallDir);
-                BlockState supportState = level.getBlockState(wallPos);
-                if (!supportState.isFaceSturdy(level, wallPos, state.getValue(FACING))
-                        && !(supportState.getBlock() instanceof BrazierBlock)) {
-                    return Blocks.AIR.defaultBlockState();
-                }
+            if (!direction.getAxis().isHorizontal()) {
+                return state;
             }
+            state = calculateConnections(state, level, pos, placement);
+            return canSurvive(state, level, pos) ? state : Blocks.AIR.defaultBlockState();
         }
 
         // Check ceiling support (solid block or chain)
@@ -714,23 +731,27 @@ public class BrazierBlock extends CampfireBlock {
         VoxelShape eastBridge = Block.box(14, 4, 3.5, 16, 13, 12.5);
         // Inside corner (models/block/brazier/wall_corner_*.json): the 8 px junction with its back rim, the arm
         // forward, and on each side an arm to the next brazier or the rim of a closed end
+        // Corners (models/block/brazier/wall_corner_*.json, wall_outer_*.json): the 8 px junction with its back rim,
+        // the arm forward, and on each side an arm to the next brazier or the rim of a closed end. An inside
+        // corner (front 4) has the bracket; an outside one (8) is drawn facing its back and has none.
         VoxelShape junction = Shapes.or(Block.box(4, 4, 4, 12, 13, 12), Block.box(4, 11, 12, 12, 13, 12.5),
-                Block.box(3.5, 4, 0, 12.5, 13, 4), bracket);
+                Block.box(3.5, 4, 0, 12.5, 13, 4));
         VoxelShape westArm = Block.box(0, 4, 3.5, 4, 13, 12.5);
         VoxelShape westEnd = Block.box(3.5, 11, 4, 4, 13, 12.5);
         VoxelShape eastArm = Block.box(12, 4, 3.5, 16, 13, 12.5);
         VoxelShape eastEnd = Block.box(12, 11, 4, 12.5, 13, 12.5);
         Map<Direction, VoxelShape[]> shapes = new HashMap<>();
-        for (int joined = 0; joined < 8; joined++) {
+        for (int joined = 0; joined < 12; joined++) {
             VoxelShape north;
-            if ((joined & 4) == 0) {
+            if ((joined & 12) == 0) {
                 north = Shapes.or(cage, (joined & 1) != 0 ? westBridge : Shapes.empty(), (joined & 2) != 0 ? eastBridge : Shapes.empty());
             } else {
-                north = Shapes.or(junction, (joined & 1) != 0 ? westArm : westEnd, (joined & 2) != 0 ? eastArm : eastEnd);
+                north = Shapes.or(junction, (joined & 1) != 0 ? westArm : westEnd, (joined & 2) != 0 ? eastArm : eastEnd,
+                        (joined & 4) != 0 ? bracket : Shapes.empty());
             }
             Map<Direction, VoxelShape> turned = Shapes.rotateHorizontal(north.optimize());
             for (Direction facing : Direction.Plane.HORIZONTAL) {
-                shapes.computeIfAbsent(facing, f -> new VoxelShape[8])[joined] = turned.get(facing);
+                shapes.computeIfAbsent(facing, f -> new VoxelShape[12])[joined] = turned.get(facing);
             }
         }
         return shapes;
@@ -738,21 +759,22 @@ public class BrazierBlock extends CampfireBlock {
 
     /**
      * The wall cage for its facing, stretched over the sides that join the next wall brazier; joined on its
-     * front, the inside-corner cage instead.
+     * front, the inside-corner cage instead, and joined only on its back, the outside-corner cage, drawn facing
+     * its back as its model is.
      */
     private static VoxelShape wallShape(BlockState state) {
         Direction facing = state.getValue(FACING);
-        int joined = 0;
-        if (state.getValue(getConnectionProperty(drawnSide(Direction.WEST, facing)))) {
+        boolean front = state.getValue(getConnectionProperty(facing));
+        boolean outside = !front && state.getValue(getConnectionProperty(facing.getOpposite()));
+        Direction drawn = outside ? facing.getOpposite() : facing;
+        int joined = front ? 4 : outside ? 8 : 0;
+        if (state.getValue(getConnectionProperty(drawnSide(Direction.WEST, drawn)))) {
             joined |= 1;
         }
-        if (state.getValue(getConnectionProperty(drawnSide(Direction.EAST, facing)))) {
+        if (state.getValue(getConnectionProperty(drawnSide(Direction.EAST, drawn)))) {
             joined |= 2;
         }
-        if (state.getValue(getConnectionProperty(facing))) {
-            joined |= 4;
-        }
-        return WALL_SHAPES.get(facing)[joined];
+        return WALL_SHAPES.get(drawn)[joined];
     }
 
     /** A side of the wall model as drawn facing north, once the model is turned to face {@code facing}. */
@@ -793,17 +815,19 @@ public class BrazierBlock extends CampfireBlock {
      * Fire pits join braziers placed the same way: floor beside floor, or wall beside wall on the same
      * wall. Hanging braziers never connect (PRD: Placement).
      *
-     * <p>Wall runs also turn inside corners (owner, 2026-10-25): a wall brazier joins one in front of it on
-     * the other wall, and is then the corner piece. Along its sides it joins the next brazier on the same
-     * wall, or a corner piece whose front points at it. Nothing joins behind a wall brazier, so the runs
-     * around an outside corner stop with a gap.
+     * <p>Wall runs also turn corners (owner, 2026-10-25). Inside: a wall brazier joins one in front of it on
+     * the other wall, and is then the corner piece. Outside: the corner piece hangs in the block beside a
+     * wall block's edge, and joins behind it the run on the block's next face, or, before that run is there,
+     * turns toward that face anyway. Along its sides a wall brazier joins the next brazier on the same wall,
+     * or a corner piece whose front or back points at it.
      */
     protected static boolean canConnect(LevelReader level, BlockPos pos, BlockState state, Direction direction) {
         BlockState neighborState = level.getBlockState(pos.relative(direction));
-        if (!(neighborState.getBlock() instanceof BrazierBlock)) {
-            return false;
-        }
         BrazierPlacement placement = state.getValue(PLACEMENT);
+        if (!(neighborState.getBlock() instanceof BrazierBlock)) {
+            return placement == BrazierPlacement.WALL && direction == state.getValue(FACING).getOpposite()
+                    && turnsAroundEdge(level, pos, state.getValue(FACING));
+        }
         if (placement == BrazierPlacement.CEILING || neighborState.getValue(PLACEMENT) != placement) {
             return false;
         }
@@ -816,9 +840,64 @@ public class BrazierBlock extends CampfireBlock {
             return neighborFacing.getAxis() != facing.getAxis();
         }
         if (direction == facing.getOpposite()) {
-            return false;
+            return neighborFacing.getAxis() != facing.getAxis() && outsideCorner(level, pos, neighborFacing);
+        }
+        if (neighborFacing == direction) {
+            return outsideCorner(level, pos.relative(direction), facing);
         }
         return neighborFacing == facing || neighborFacing == direction.getOpposite();
+    }
+
+    /**
+     * Whether the wall brazier at {@code corner}, backed by a wall brazier facing {@code around}, is an outside
+     * corner piece: where its own run meets the wall block's corner there is open space or that run, not a
+     * wall that goes on. Against a wall that goes on, it's a brazier hung on the end of a run (sneaking), which
+     * stays apart.
+     */
+    private static boolean outsideCorner(LevelReader level, BlockPos corner, Direction around) {
+        BlockState meeting = level.getBlockState(corner.relative(around.getOpposite()));
+        return meeting.canBeReplaced() || meeting.getBlock() instanceof BrazierBlock;
+    }
+
+    /**
+     * Whether a wall brazier facing {@code facing} at {@code pos} is an outside corner still waiting for the
+     * run on the next face: nothing behind it but open space, and beside it a brazier of its run whose wall
+     * block has a sturdy face toward that space, the face the next run goes on.
+     */
+    private static boolean turnsAroundEdge(LevelReader level, BlockPos pos, Direction facing) {
+        BlockPos behind = pos.relative(facing.getOpposite());
+        if (!level.getBlockState(behind).canBeReplaced()) {
+            return false;
+        }
+        for (Direction side : new Direction[] {facing.getClockWise(), facing.getCounterClockWise()}) {
+            BlockState beside = level.getBlockState(pos.relative(side));
+            BlockPos wallBlock = behind.relative(side);
+            if (beside.getBlock() instanceof BrazierBlock && beside.getValue(PLACEMENT) == BrazierPlacement.WALL
+                    && beside.getValue(FACING) == facing && level.getBlockState(wallBlock).isFaceSturdy(level, wallBlock, side.getOpposite())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * An outside corner piece hangs in open air beside a wall block's edge, held by its neighbours (owner,
+     * 2026-10-25): the run it turns from, beside it. (The run it turns into, behind it, holds it as any brazier
+     * behind a wall brazier does.)
+     */
+    private static boolean heldByRun(LevelReader level, BlockPos pos, BlockState state) {
+        Direction facing = state.getValue(FACING);
+        if (!state.getValue(getConnectionProperty(facing.getOpposite()))) {
+            return false;
+        }
+        for (Direction side : new Direction[] {facing.getClockWise(), facing.getCounterClockWise()}) {
+            BlockState beside = level.getBlockState(pos.relative(side));
+            if (beside.getBlock() instanceof BrazierBlock && beside.getValue(PLACEMENT) == BrazierPlacement.WALL
+                    && beside.getValue(FACING) == facing) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private BlockState calculateConnections(BlockState state, LevelReader level, BlockPos pos, BrazierPlacement placement) {
