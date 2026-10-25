@@ -188,7 +188,9 @@ braziers (shared sides open up). Hanging braziers never connect.
 >   joined to its pit, even out over air.
 > - Clicking either end of a wall brazier places the next one along the same
 >   wall, wherever that wall goes on. Where the wall stops, as at a pillar's
->   edge, the brazier mounts on the end of the run, as before.
+>   edge, it goes around the corner onto the block's next face, bracketed to
+>   the block, and the corner block stays empty. If that face already has a
+>   brazier, nothing is placed.
 > - Sneak-clicking places by the clicked face, as before: a wall brazier on
 >   the side of a floor brazier, or one mounted on the end of a wall brazier.
 >
