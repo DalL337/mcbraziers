@@ -343,3 +343,39 @@ Approved by the owner on 2026-10-18 from mockups
 > - Screenshots in `temp/art/screenshots/`: `art-wall-corner*.png` (iron, by
 >   day, close up, from above, at night; copper bracketed to the other wall)
 >   and `art-wall-outside-corner.png` (the gap around a pillar).
+
+> **Addendum (2026-10-25, outside corners; owner decision after reviewing
+> mockups in game):** The block beside a wall block's outside edge, such as a
+> pillar's, holds an outside corner piece. It joins the runs on the block's two
+> faces into one trough round the edge. It is the inside corner's L turned to
+> face its back, which joins the run around the corner. It has no bracket; its
+> neighbours hold it.
+>
+> The owner's changes from the first mockup:
+> - **Slats:** thinner 1 px slats along the outer face, evenly every 5 px from
+>   the last slat of one run to the first slat of the other. The windows are an
+>   even 4 px round the bend, so more of the fire shows. The slat on the bend
+>   itself is a 1 px corner post.
+> - **Tips:** along the whole outer top edge, leaning out over each slat like
+>   the straight pieces' tips. Two rise from the corner post, one leaning out
+>   from each face of the turn. The owner turned down a diagonal finial as
+>   outside the design language. The inner face, toward the block's edge,
+>   stays open like the bridges, with no tips, as a straight brazier's back has
+>   none.
+>
+> The parts are `wall_outer_*` in `tools/art/brazier-art.mjs`: a shared
+> junction, and per side the closed "bend" or the arm, since the side the run
+> comes in from moves every slat. The arm forward is the inside corner's.
+> The inside corner's bracket is now its own part, `wall_corner_bracket`.
+> The hitbox is the inside corner's junction and arms without the bracket:
+> 4 to 13 px up, to the block edge behind and on a joined side, with the rim
+> of the closed side at 3.5 or 12.5 px.
+>
+> Checks: build with no warnings; game tests 45 of 45; client tests pass,
+> including a real-click wrap round a log pillar photographed from above
+> (`art-wall-outside-corner-placed*.png`) and a trough round three faces of
+> a pillar (`art-wall-outside-corner*.png`). Mutation checks, each caught:
+> nothing joining behind, no turn before the next run is placed, the piece
+> not held by its run, a brazier hung on a run's end against a continuing
+> wall counted as a corner, the open end's click facing the clicked side, no
+> corner turned at the edge, and the corner hitbox ignored.

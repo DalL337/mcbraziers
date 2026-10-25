@@ -187,10 +187,11 @@ braziers (shared sides open up). Hanging braziers never connect.
 > - Clicking the side of a floor brazier places a floor brazier beside it,
 >   joined to its pit, even out over air.
 > - Clicking either end of a wall brazier places the next one along the same
->   wall, wherever that wall goes on. Where the wall stops, as at a pillar's
->   edge, it goes around the corner onto the block's next face, bracketed to
->   the block, and the corner block stays empty. If that face already has a
->   brazier, nothing is placed.
+>   wall, wherever that wall goes on. Where the wall stops at a block's
+>   outside corner, as at a pillar's edge, it places the outside corner piece
+>   in the corner block, turned toward the block's next face. Clicking that
+>   piece's open end, or the face itself, puts the next brazier on that face.
+>   Where the wall stops with no corner to turn, nothing is placed.
 > - Clicking the front of a wall brazier grows the run from the end nearer
 >   the click, as clicking that end does.
 > - Sneak-clicking places by the clicked face, as before: a wall brazier on
@@ -199,10 +200,14 @@ braziers (shared sides open up). Hanging braziers never connect.
 >
 > Wall runs turn **inside corners**: where two walls meet, the brazier in the
 > corner joins the runs on both walls into one L-shaped trough, bracketed to
-> one wall, the wall of the run it was placed from. **Outside corners** leave
-> a gap: the runs on two faces of a pillar stop at its edge. A brazier
-> standing out in front of another wall brazier doesn't join it. The corner
-> art is in `docs/plans/art/copper-brazier-art.md` (Inside corners addendum).
+> one wall, the wall of the run it was placed from. **Outside corners** join
+> too: the corner piece in the block beside a block's edge joins the runs on
+> its two faces into one trough round the edge. It has no bracket; its
+> neighbours hold it, and it falls when neither is left. A brazier standing
+> out in front of another wall brazier doesn't join it, nor does one hung
+> on the end of a run where the wall goes on. The corner art is in
+> `docs/plans/art/copper-brazier-art.md` (Inside corners and Outside corners
+> addenda).
 
 ### Cooking
 
