@@ -55,7 +55,11 @@ On a server, install the mod and Fabric API on the server and on every player's 
   always closed. Closed braziers cook like campfires, up to 4 items at once. Open ones burn anything
   that steps in.
 - Floor braziers side by side join into one fire pit. Wall braziers in a row on the same wall join up
-  too.
+  too, and the row turns where two walls meet. It also wraps round a block's outside corner when both
+  faces have wall braziers.
+- Click a brazier with a brazier in hand to grow its fire pit. The side of a floor brazier adds one
+  beside it. The end or the front of a wall brazier adds the next one along the wall, or straight on
+  past where the wall ends. Sneak-click to place against the clicked face instead.
 - Copper braziers age through four stages. Wax them with honeycomb, and scrape them with an axe.
 - Diamond, obsidian, crying obsidian, prismarine and netherite bars are placeable blocks that connect
   like iron bars.
