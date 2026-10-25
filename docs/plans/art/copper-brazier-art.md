@@ -387,3 +387,7 @@ Approved by the owner on 2026-10-18 from mockups
 > brazier strung out over open space draws the straight wall model, bracket
 > plate included, with no wall behind it (`art-wall-string-behind.png`).
 > Whether those braziers drop the bracket is the owner's call.
+
+> **Addendum (2026-10-25, owner decision):** Strung braziers keep the bracket
+> plate for now ("I am not too worried about it"). Dropping it would need a
+> new block-state property, which would double the brazier block states.
