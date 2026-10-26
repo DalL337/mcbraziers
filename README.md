@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/images/emblem.png" alt="MC Braziers emblem: braziers with blue, green, orange, purple and white fire on a sunset beach" width="320">
+</p>
+
 # MC Braziers
 
 A Fabric mod for Minecraft that adds metal braziers in a vanilla+ style. A brazier is a campfire held
