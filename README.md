@@ -75,6 +75,32 @@ On a server, install the mod and Fabric API on the server and on every player's 
 1 netherite ingot. The new campfires are crafted like a campfire, with a copper nugget or an amethyst
 shard in place of the coal.
 
+## Screenshots
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/images/screenshots/lineup-day.jpg" alt="Braziers of every tier and fire type on a sandy beach by day"></td>
+    <td width="50%"><img src="docs/images/screenshots/bars.jpg" alt="Netherite, diamond, crying obsidian, obsidian and prismarine bars standing on sand"></td>
+  </tr>
+  <tr>
+    <td>Every tier and fire type, with the Copper and Amethyst Campfires at the back.</td>
+    <td>The placeable bars: netherite, diamond, crying obsidian, obsidian and prismarine.</td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/screenshots/lineup-night-solas.jpg" alt="The braziers at night with Solas shaders, lighting the sand in orange, green, blue and purple"></td>
+    <td><img src="docs/images/screenshots/lineup-night-photon.jpg" alt="The braziers at night with Photon shaders, lighting the sand in their fire colours"></td>
+  </tr>
+  <tr>
+    <td>At night with Solas: each fire lights the sand in its own colour.*</td>
+    <td>At night with Photon, with its Colored Lights setting on.*</td>
+  </tr>
+</table>
+
+The screenshots use the Solas and Photon shader packs. \*Coloured light from braziers needs MC Braziers
+support in the shader pack itself, which is waiting to be merged in
+[Solas](https://github.com/Septonious/Solas-Shader/pull/206) and
+[Photon](https://github.com/sixthsurge/photon/pull/692).
+
 ## Build from source
 
 You need a JDK 25 installed (CI uses Eclipse Temurin 25). The Gradle wrapper downloads Gradle and
