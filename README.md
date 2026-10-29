@@ -9,6 +9,10 @@ in a cage of bars: the bars set its **tier**, and the campfire sets its **fire t
 the floor, mount on walls, or hang from chains and ceilings. They cook food, light your builds, and join
 up into fire pits.
 
+**Supports Solas Shaders.** With [Solas](https://modrinth.com/shader/solas-shader), each brazier lights
+its surroundings in the colour of its fire. The support is merged into Solas and arrives in its next
+release; Solas 3.8 and earlier don't have it yet.
+
 **NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.**
 
 ## Requirements
@@ -97,9 +101,8 @@ shard in place of the coal.
 </table>
 
 The screenshots use the Solas and Photon shader packs. \*Coloured light from braziers needs MC Braziers
-support in the shader pack itself, which is waiting to be merged in
-[Solas](https://github.com/Septonious/Solas-Shader/pull/206) and
-[Photon](https://github.com/sixthsurge/photon/pull/692).
+support in the shader pack itself. It is [merged in Solas](https://github.com/Septonious/Solas-Shader/pull/206)
+for its next release after 3.8, and [waiting to be merged in Photon](https://github.com/sixthsurge/photon/pull/692).
 
 ## Build from source
 
