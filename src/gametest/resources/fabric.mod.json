@@ -13,7 +13,8 @@
             "com.dai.mcbraziers.gametest.SpecialsAndMiningGameTests",
             "com.dai.mcbraziers.gametest.CopperAgingGameTests",
             "com.dai.mcbraziers.gametest.BrazierCageGameTests",
-            "com.dai.mcbraziers.gametest.BrazierPlacementGameTests"
+            "com.dai.mcbraziers.gametest.BrazierPlacementGameTests",
+            "com.dai.mcbraziers.gametest.ShaderPackContractGameTests"
         ],
         "fabric-client-gametest": [
             "com.dai.mcbraziers.gametest.BrazierPlacementClientGameTest",
